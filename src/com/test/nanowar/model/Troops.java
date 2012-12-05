@@ -31,7 +31,7 @@ public class Troops extends GameObject {
 
         // TODO! obliczenie odleglosci, wyznaczenie sciezki, narysowanie linii, uruchomienie animacji
         // w animacji sprawdzamy, czy sie nie przecielismy z docelowa wieza (jesli tak,
-        // wywolaj destination.troopsArrived(this) i usun linie i samego siebie
+        // wywolaj destination.troopsArrived(this)
     }
 
     public Player getOwner() {

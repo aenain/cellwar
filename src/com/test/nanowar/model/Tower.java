@@ -38,6 +38,14 @@ public class Tower extends GameObject {
         internalLocation = new Rect(center.y + getInternalRadius(), center.x - getInternalRadius(), center.x + getInternalRadius(), center.y + getInternalRadius());
     }
 
+    public Integer getCapacity() {
+        return capacity;
+    }
+
+    public Integer getTroopsCount() {
+        return troopsCount;
+    }
+
     // zwraca promien dla glownej czesci wiezy, ktora "rosnie"
     public final Integer getInternalRadius() {
         // int radius = Math.min(capacity, troopsCount);
@@ -58,19 +66,20 @@ public class Tower extends GameObject {
         troopsCount = (int)Math.floor(internalTroopsCount);
     }
 
-    public void draw(ViewGroup group) {
-        
-    }
     /*
      * wysyla wojsko do wiezy.
      * @param percentageShare - ile % jednostek obecnych w wiezy powinno zostac wyslanych (50-99)
      */
-    public void sendTroops(Integer percentageShare, Tower destination) {
+    public Troops sendTroops(Integer percentageShare, Tower destination) {
+        Troops bubble = null;
         int count = (int)Math.floor(troopsCount * percentageShare / 100);
+        
         if (count > 0) {
-            Troops bubble = new Troops(owner, count, this.center);
+            bubble = new Troops(owner, count, this.center);
             bubble.sendBetween(this, destination);
         }
+
+        return bubble;
     }
 
     /*
@@ -89,6 +98,8 @@ public class Tower extends GameObject {
                 changeOwner(bubble.getOwner());
             }
         }
+
+        level.getPlayerTroops(bubble.getOwner()).remove(bubble);
     }
 
     protected void changeOwner(Player newOwner) {
