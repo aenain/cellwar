@@ -16,12 +16,18 @@ import java.util.List;
 public class Player {
     
     public enum PlayerType {
-        USER, COMPUTER
+        USER, COMPUTER, NONE
     }
     
     protected PlayerType playerType;
     protected ArrayList<Tower> towers;
     protected ArrayList<Troops> troops;
+
+    public Player(PlayerType type) {
+        this.playerType = type;
+        this.towers = new ArrayList<Tower>();
+        this.troops = new ArrayList<Troops>();
+    }
 
     public Player(PlayerType playerType, ArrayList<Tower> towers, ArrayList<Troops> troops) {
         this.playerType = playerType;

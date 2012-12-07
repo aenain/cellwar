@@ -17,10 +17,15 @@ import java.util.LinkedList;
 public class Level {
     
     protected String levelName;
+    protected int number;
     protected int bestScore, bestTime;
     protected int timeRequirement[] = new int[3];
     protected ArrayList<Tower> userTowers;
     protected ArrayList<Tower> computerTowers;
+
+    public Level(int number) {
+        this.number = number;
+    }
 
     public int getBestScore() {
         return bestScore;

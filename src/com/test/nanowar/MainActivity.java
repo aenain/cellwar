@@ -8,6 +8,7 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -15,30 +16,34 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.larvalabs.svgandroid.SVG;
 import com.larvalabs.svgandroid.SVGParser;
+import com.test.nanowar.model.Level;
+import com.test.nanowar.model.MainGamePanel;
 import com.test.nanowar.model.Player;
 
 public class MainActivity extends Activity {
-    protected RelativeLayout l;
+    public static int BACKGROUND_COLOR = Color.rgb(16, 171, 226);
+    protected MainLayout layout;
 
-    protected void addTower(Point center, int radius, Integer troopsCount, Player owner) {
+    protected RelativeLayout addTower(Point center, int radius, Integer troopsCount, Player owner) {
         int outerResourceId, innerResourceId, textColor;
 
-        if (owner.getPlayerType() == Player.PlayerType.COMPUTER) {
-            outerResourceId = R.raw.celloutercomputer;
-            innerResourceId = R.raw.cellinnercomputer;
-            textColor = Color.rgb(255, 255, 255);
-        }
-        else if (owner.getPlayerType() == Player.PlayerType.USER) {
-            outerResourceId = R.raw.cellouteruser;
-            innerResourceId = R.raw.cellinneruser;
-            textColor = Color.rgb(16, 171, 226);
-        }
-        else {
+        if (owner == null) {
             outerResourceId = R.raw.cellouternone;
             innerResourceId = R.raw.cellinnernone;
             textColor = Color.rgb(255, 255, 255);
         }
-        if (l != null) {
+        if (owner.isComputer()) {
+            outerResourceId = R.raw.celloutercomputer;
+            innerResourceId = R.raw.cellinnercomputer;
+            textColor = Color.rgb(255, 255, 255);
+        }
+        else {
+            outerResourceId = R.raw.cellouteruser;
+            innerResourceId = R.raw.cellinneruser;
+            textColor = Color.rgb(16, 171, 226);
+        }
+
+        if (layout != null) {
             RelativeLayout.LayoutParams params;
             SVG svg;
 
@@ -48,7 +53,17 @@ public class MainActivity extends Activity {
             params.alignWithParent = true;
             params.leftMargin = center.x - radius;
             params.topMargin = center.y - radius;
-            l.addView(tower, params);
+            layout.addView(tower, params);
+
+            tower.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    v.setBackgroundColor(Color.BLACK);
+                }
+            });
+
+            if (owner == null || !owner.isUser()) {
+                tower.setOnClickListener(null);
+            }
 
             // outer background
             ImageView outerBackground = new ImageView(this);
@@ -77,22 +92,10 @@ public class MainActivity extends Activity {
             params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             params.addRule(RelativeLayout.CENTER_IN_PARENT);
             tower.addView(numberOfTroops, params);
+
+            return tower;
         }
-    }
-
-    protected Point getPoint(int percentageX, int percentageY) {
-        int x, y;
-        DisplayMetrics metrics = getResources().getDisplayMetrics();
-
-        x = (int)Math.round(metrics.widthPixels * percentageX / 100);
-        y = (int)Math.round(metrics.heightPixels * percentageY / 100);
-
-        return new Point(x, y);
-    }
-
-    protected int getRadius(int percentage) {
-        DisplayMetrics metrics = getResources().getDisplayMetrics();
-        return (int)Math.round(Math.min(metrics.heightPixels, metrics.widthPixels) * percentage / 100);
+        return null;
     }
 
     /**
@@ -102,22 +105,25 @@ public class MainActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        l = new RelativeLayout(this);
+        // settings of layout and window
+        layout = new MainLayout(this);
         RelativeLayout.LayoutParams mainParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-        l.setLayoutParams(mainParams);
+        layout.setLayoutParams(mainParams);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(l);
+        setContentView(layout);
 
         // background        
         ImageView imageView = new ImageView(this);
-        imageView.setBackgroundColor(Color.rgb(16, 171, 226));
-        l.addView(imageView, mainParams);
+        imageView.setBackgroundColor(BACKGROUND_COLOR);
+        layout.addView(imageView, mainParams);
 
-        // towers
-        addTower(getPoint(50, 50), getRadius(8), 27, new Player(Player.PlayerType.USER, null, null));
-        addTower(getPoint(25, 50), getRadius(12), 48, null);
-        addTower(getPoint(75, 75), getRadius(16), 135, new Player(Player.PlayerType.USER, null, null));
+        // models
+        int levelNumber = 10;
+        Level level = new Level(levelNumber);
+        MainGamePanel gamePanel = new MainGamePanel(layout, level);
+        gamePanel.initLevel();
+        gamePanel.startGame();
     }
 
     @Override

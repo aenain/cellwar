@@ -5,9 +5,9 @@
 package com.test.nanowar.model;
 
 import android.graphics.Point;
+import com.test.nanowar.MainLayout;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.List;
 
 /**
@@ -23,17 +23,33 @@ import java.util.List;
 public class MainGamePanel {
     protected HashMap< Player, List<Tower> > playerTowers;
     protected HashMap< Player, List<Troops> > playerTroops;
+    protected MainLayout layout;
+    protected Level level;
+    protected MainThread thread;
 
-    public MainGamePanel(Player user, Player comp) {
+    public MainGamePanel(MainLayout layout, Level level) {
+        this.layout = layout;
+        this.level = level;
+
+        Player user = new Player(Player.PlayerType.USER);
+        Player computer = new Player(Player.PlayerType.COMPUTER);
+        Player none = new Player(Player.PlayerType.NONE);
+
         playerTowers = new HashMap();
         playerTowers.put(user, new LinkedList());
-        playerTowers.put(comp, new LinkedList());
+        playerTowers.put(none, new LinkedList());
+        playerTowers.put(computer, new LinkedList());
 
         playerTroops = new HashMap();
         playerTroops.put(user, new LinkedList());
-        playerTroops.put(comp, new LinkedList());
+        playerTowers.put(none, new LinkedList());
+        playerTroops.put(computer, new LinkedList());
     }
-    
+
+    public void update() {
+        // TODO! update state of game
+    }
+
     public MainGamePanel(Player user, Player comp, Level lvl) {
         user.clearObjects();
         comp.clearObjects();
@@ -73,13 +89,25 @@ public class MainGamePanel {
         }
     }
 
+    public void initLevel() {
+        // TODO! pobranie danych z levelu, stworzenie wież
+    }
+
+    public void startGame() {
+        thread = new MainThread(this);
+        thread.setRunning(true);
+        thread.start();
+    }
+
+    public void stopGame() {
+        thread.setRunning(false);
+        // TODO! zapis stanu gry
+    }
+
     public Tower createTower(Player owner, Integer capacity, Integer initTroopsCount, Point center) {
         Tower tower = new Tower(owner, capacity, initTroopsCount, center, this);
         return tower;
     }
-
-    // TODO! tworzenie wiez w okreslonych miejscach dla poszczegolnych graczy
-    // TODO! metoda update, ktora update'uje wszystkie obiekty, a potem je rysuje
 
     public void changeOwner(Tower tower, Player oldOwner, Player newOwner) {
         List<Tower> oldOwnerTowers = playerTowers.get(oldOwner);
@@ -88,7 +116,7 @@ public class MainGamePanel {
         List<Tower> newOwnerTowers = playerTowers.get(newOwner);
         newOwnerTowers.add(tower);
 
-        if (oldOwnerTowers.isEmpty()) {
+        if ((oldOwner.isComputer() || oldOwner.isUser()) && oldOwnerTowers.isEmpty()) {
             // TODO! koniec gry
         }
     }
