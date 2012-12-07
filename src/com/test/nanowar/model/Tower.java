@@ -24,10 +24,10 @@ public class Tower extends GameObject {
 
     protected double internalTroopsCount;
 
-    protected Level level;
+    protected MainGamePanel level;
     protected Rect internalLocation;
 
-    public Tower(Player owner, Integer capacity, int initTroopsCount, Point center, Level level) {
+    public Tower(Player owner, Integer capacity, int initTroopsCount, Point center, MainGamePanel level) {
         super(owner, center);
         this.capacity = capacity;
         this.troopsCount = initTroopsCount;
