@@ -6,9 +6,9 @@ package com.test.nanowar.model;
 
 import android.graphics.Point;
 import com.test.nanowar.MainLayout;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import com.test.nanowar.model.Player.PlayerType;
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  *
@@ -26,33 +26,30 @@ public class MainGamePanel {
     protected MainLayout layout;
     protected Level level;
     protected MainThread thread;
+    protected Player userPlayer, computerPlayer, nonePlayer;
 
     public MainGamePanel(MainLayout layout, Level level) {
         this.layout = layout;
         this.level = level;
 
-        Player user = new Player(Player.PlayerType.USER);
-        Player computer = new Player(Player.PlayerType.COMPUTER);
-        Player none = new Player(Player.PlayerType.NONE);
+        userPlayer = new Player(Player.PlayerType.USER);
+        computerPlayer = new Player(Player.PlayerType.COMPUTER);
+        nonePlayer = new Player(Player.PlayerType.NONE);
 
         playerTowers = new HashMap();
-        playerTowers.put(user, new LinkedList());
-        playerTowers.put(none, new LinkedList());
-        playerTowers.put(computer, new LinkedList());
+        playerTowers.put(userPlayer, new LinkedList());
+        playerTowers.put(nonePlayer, new LinkedList());
+        playerTowers.put(computerPlayer, new LinkedList());
 
         playerTroops = new HashMap();
-        playerTroops.put(user, new LinkedList());
-        playerTowers.put(none, new LinkedList());
-        playerTroops.put(computer, new LinkedList());
+        playerTroops.put(userPlayer, new LinkedList());
+        playerTowers.put(nonePlayer, new LinkedList());
+        playerTroops.put(computerPlayer, new LinkedList());
     }
-
-    public void update() {
-        // TODO! update state of game
-    }
-
+    
     public MainGamePanel(Player user, Player comp, Level lvl) {
-        user.clearObjects();
-        comp.clearObjects();
+        /*user.clearObjects();
+        comp.clearObjects();*/
         
         playerTowers = new HashMap();
         playerTowers.put(user, user.getTowers());
@@ -61,6 +58,112 @@ public class MainGamePanel {
         playerTroops = new HashMap();
         playerTroops.put(user, user.getTroops());
         playerTroops.put(comp, comp.getTroops());
+    }
+
+    public Player getComputerPlayer() {
+        return computerPlayer;
+    }
+
+    public void setComputerPlayer(Player computerPlayer) {
+        this.computerPlayer = computerPlayer;
+    }
+
+    public Level getLevel() {
+        return level;
+    }
+
+    public void setLevel(Level level) {
+        this.level = level;
+    }
+
+    public Player getNonePlayer() {
+        return nonePlayer;
+    }
+
+    public void setNonePlayer(Player nonePlayer) {
+        this.nonePlayer = nonePlayer;
+    }
+
+    public Player getUserPlayer() {
+        return userPlayer;
+    }
+
+    public void setUserPlayer(Player userPlayer) {
+        this.userPlayer = userPlayer;
+    }
+
+    public void update() {
+        // TODO! update state of game
+        updateTroops();
+        updateTowers();
+        handleCollisions();
+        updateTowersLists();
+    }
+    
+    public void updateTroops() {
+        Set<Player> players = playerTroops.keySet();
+        for(Player player : players) {
+            List<Troops> troops = playerTroops.get(player);
+            for(Troops troop : troops) {
+                troop.update();
+            }
+        }
+    }
+    
+    public void updateTowers() {
+        Set<Player> players = playerTowers.keySet();
+        for(Player player : players) {
+            List<Tower> towerList = playerTowers.get(player);
+            for(Tower tower : towerList) {
+                tower.update();
+            }
+        }
+    }
+    
+    public void handleCollisions() {
+        Set<Player> players = playerTroops.keySet();
+        for(Player player : players) {
+            List<Troops> troops = playerTroops.get(player);
+            for(int i = 0; i < troops.size();) {
+                Troops troop = troops.get(i);
+                if(troop.destinationReached()) {
+                    troop.getDestination().troopsArrived(troop);
+                    troops.remove(i);
+                } 
+                else {
+                    i++;
+                }               
+            }
+        }
+    }
+    
+    public void updateTowersLists() {
+        HashMap<Player, List<Tower> > tempPlayTowers = new HashMap();
+        tempPlayTowers.put(userPlayer, new ArrayList());
+        tempPlayTowers.put(computerPlayer, new ArrayList());
+        tempPlayTowers.put(nonePlayer, new ArrayList());
+        
+        Iterator< Entry < Player, List<Tower> > > iter;
+        for(iter = playerTowers.entrySet().iterator(); iter.hasNext(); ) {
+            Entry < Player, List<Tower> > entry = iter.next();
+            
+            Iterator<Tower> listIter ;
+            for(listIter = entry.getValue().iterator(); listIter.hasNext(); ) {
+                Tower tower = listIter.next();
+                
+                if(tower.getOwner().isComputer()) {
+                    tempPlayTowers.get(computerPlayer).add(tower);
+                }
+                else if(tower.getOwner().isUser()) {
+                    tempPlayTowers.get(userPlayer).add(tower);
+                }
+                else if(tower.getOwner().isNone()) {
+                    tempPlayTowers.get(nonePlayer).add(tower);
+                }
+            }
+        }
+        
+        playerTowers = tempPlayTowers;
     }
 
     public HashMap< Player, List<Tower> > getPlayerTowers() {
@@ -90,7 +193,19 @@ public class MainGamePanel {
     }
 
     public void initLevel() {
-        // TODO! pobranie danych z levelu, stworzenie wież
+        Iterator< Entry < Player, List<Tower> > > iter;
+        for(iter = playerTowers.entrySet().iterator(); iter.hasNext(); ) {
+            Entry < Player, List<Tower> > entry = iter.next();
+            if(entry.getKey().isComputer() && level != null) {
+                entry.setValue(level.getComputerTowers());
+            }
+            else if(entry.getKey().isUser() && level != null) {
+                entry.setValue(level.getUserTowers());
+            }
+            else if(entry.getKey().isNone() && level != null) {
+                entry.setValue(level.getNobodyTowers());
+            } 
+        }
     }
 
     public void startGame() {

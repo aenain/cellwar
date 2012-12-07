@@ -22,9 +22,13 @@ public class Level {
     protected int timeRequirement[] = new int[3];
     protected ArrayList<Tower> userTowers;
     protected ArrayList<Tower> computerTowers;
+    protected ArrayList<Tower> nobodyTowers;
 
     public Level(int number) {
         this.number = number;
+        userTowers = new ArrayList();
+        computerTowers = new ArrayList();
+        nobodyTowers = new ArrayList();
     }
 
     public int getBestScore() {
@@ -74,8 +78,16 @@ public class Level {
     public void setUserTowers(ArrayList<Tower> userTowers) {
         this.userTowers = userTowers;
     }
+
+    public ArrayList<Tower> getNobodyTowers() {
+        return nobodyTowers;
+    }
+
+    public void setNobodyTowers(ArrayList<Tower> nobodyTowers) {
+        this.nobodyTowers = nobodyTowers;
+    }
     
-    public void setPlayersTowers(Player user, Player comp) {
+    /*public void setPlayersTowers(Player user, Player comp, Player none) {
         if(user.isUser()) {
             user.clearObjects();
             user.setTowers(userTowers);
@@ -84,5 +96,9 @@ public class Level {
             comp.clearObjects();
             comp.setTowers(computerTowers);
         }
-    }
+        if(none.isNone()) {
+            none.clearObjects();
+            none.setTowers(nobodyTowers);
+        }
+    }*/
 }

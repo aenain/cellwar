@@ -17,6 +17,7 @@ public class GameObject {
     protected Point center;
     protected Rect location;
     protected ViewGroup viewGroup;
+    protected int radius;
     
     public GameObject(Player owner, Point center, int radius) {
         this.owner = owner;

@@ -20,19 +20,23 @@ public class Player {
     }
     
     protected PlayerType playerType;
-    protected ArrayList<Tower> towers;
-    protected ArrayList<Troops> troops;
+    protected MainGamePanel gamePanel;
 
     public Player(PlayerType type) {
         this.playerType = type;
-        this.towers = new ArrayList<Tower>();
-        this.troops = new ArrayList<Troops>();
+        /*this.towers = new ArrayList<Tower>();
+        this.troops = new ArrayList<Troops>();*/
+    }
+    
+    public Player(PlayerType type, MainGamePanel gamePanel) {
+        this.playerType = type;
+        this.gamePanel = gamePanel;
     }
 
     public Player(PlayerType playerType, ArrayList<Tower> towers, ArrayList<Troops> troops) {
         this.playerType = playerType;
-        this.towers = (towers == null ? new ArrayList<Tower>() : towers);
-        this.troops = (troops == null ? new ArrayList<Troops>() : troops);
+        /*this.towers = (towers == null ? new ArrayList<Tower>() : towers);
+        this.troops = (troops == null ? new ArrayList<Troops>() : troops);*/
     }
 
     public PlayerType getPlayerType() {
@@ -43,39 +47,18 @@ public class Player {
         this.playerType = playerType;
     }
 
-    public ArrayList<Tower> getTowers() {
-        return towers;
+    public List<Tower> getTowers() {
+        return gamePanel.getPlayerTowers(this);
     }
 
-    public void setTowers(ArrayList<Tower> towers) {
-        this.towers = towers;
-    }
-
-    public ArrayList<Troops> getTroops() {
-        return troops;
-    }
-
-    public void setTroops(ArrayList<Troops> troops) {
-        this.troops = troops;
+    public List<Troops> getTroops() {
+        return gamePanel.getPlayerTroops(this);
     }
     
     public void sendTroops(List<Tower> selectedTowers, Tower destination, Integer percentageShare) {
-        for(Tower tower : selectedTowers) {
-            if(tower.getOwner() == this) {
-                tower.sendTroops(percentageShare, destination);
-            }
-        }
+        gamePanel.sendTroops(percentageShare, selectedTowers, destination);
     }
     
-    public void addTower(Tower tower) {
-        if(tower.getOwner() == this) {
-            towers.add(tower);
-        }
-    }
-    
-    public void deleteTower(Tower tower) {
-        towers.remove(tower);
-    }
     
     public boolean isComputer() {
         return this.playerType == PlayerType.COMPUTER;
@@ -85,9 +68,8 @@ public class Player {
         return this.playerType == PlayerType.USER;
     }
     
-    public void clearObjects() {
-        towers.clear();
-        troops.clear();
+    public boolean isNone() {
+        return this.playerType == PlayerType.NONE;
     }
     
 }

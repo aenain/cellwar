@@ -107,11 +107,12 @@ public class Tower extends GameObject {
         // TODO! update color
 
         level.changeOwner(this, oldOwner, newOwner);
-        oldOwner.deleteTower(this);
-        newOwner.addTower(this);
+        /*oldOwner.deleteTower(this);
+        newOwner.addTower(this);*/
     }
 
     public Player getOwner() {
         return owner;
     }
+    
 }
