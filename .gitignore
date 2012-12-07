@@ -3,8 +3,7 @@
 /dist/
 /doc/javadoc/
 /nbproject/private/
-/traces/**/*.html
-/traces/**/*.txt
-/*.html
 /private/
 /nbandroid/
+/gen/
+/local.properties
