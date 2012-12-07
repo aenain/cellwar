@@ -23,12 +23,12 @@ public class MainActivity extends Activity {
     protected void addTower(Point center, int radius, Integer troopsCount, Player owner) {
         int outerResourceId, innerResourceId, textColor;
 
-        if (owner == Player.COMPUTER) {
+        if (owner.getPlayerType() == Player.PlayerType.COMPUTER) {
             outerResourceId = R.raw.celloutercomputer;
             innerResourceId = R.raw.cellinnercomputer;
             textColor = Color.rgb(255, 255, 255);
         }
-        else if (owner == Player.USER) {
+        else if (owner.getPlayerType() == Player.PlayerType.USER) {
             outerResourceId = R.raw.cellouteruser;
             innerResourceId = R.raw.cellinneruser;
             textColor = Color.rgb(16, 171, 226);
@@ -115,9 +115,9 @@ public class MainActivity extends Activity {
         l.addView(imageView, mainParams);
 
         // towers
-        addTower(getPoint(50, 50), getRadius(8), 27, Player.USER);
+        addTower(getPoint(50, 50), getRadius(8), 27, new Player(Player.PlayerType.USER, null, null));
         addTower(getPoint(25, 50), getRadius(12), 48, null);
-        addTower(getPoint(75, 75), getRadius(16), 135, Player.COMPUTER);
+        addTower(getPoint(75, 75), getRadius(16), 135, new Player(Player.PlayerType.USER, null, null));
     }
 
     @Override

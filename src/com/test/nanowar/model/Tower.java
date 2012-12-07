@@ -19,7 +19,6 @@ public class Tower extends GameObject {
     // proporcjonalna do wielkosci.
     protected Integer capacity,
     // okresla aktualna ilosc wojsk w wiezy, nie moze przekroczyc _capacity_
-    // TODO! co w sytuacji, gdy wysylamy tak duzo wojska, ze sie nie miesci? zawracamy?
                       troopsCount;
 
     protected double internalTroopsCount;
@@ -108,6 +107,8 @@ public class Tower extends GameObject {
         // TODO! update color
 
         level.changeOwner(this, oldOwner, newOwner);
+        oldOwner.deleteTower(this);
+        newOwner.addTower(this);
     }
 
     public Player getOwner() {

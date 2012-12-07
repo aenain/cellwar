@@ -7,6 +7,8 @@ package com.test.nanowar.model;
 import android.graphics.Point;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.List;
 
 /**
  *
@@ -19,37 +21,50 @@ import java.util.LinkedList;
  * - zarzadza gra
  */
 public class MainGamePanel {
-    protected HashMap< Player, LinkedList<Tower> > playerTowers;
-    protected HashMap< Player, LinkedList<Troops> > playerTroops;
+    protected HashMap< Player, List<Tower> > playerTowers;
+    protected HashMap< Player, List<Troops> > playerTroops;
 
-    public MainGamePanel(Player a, Player b) {
+    public MainGamePanel(Player user, Player comp) {
         playerTowers = new HashMap();
-        playerTowers.put(a, new LinkedList());
-        playerTowers.put(b, new LinkedList());
+        playerTowers.put(user, new LinkedList());
+        playerTowers.put(comp, new LinkedList());
 
         playerTroops = new HashMap();
-        playerTroops.put(a, new LinkedList());
-        playerTroops.put(b, new LinkedList());
+        playerTroops.put(user, new LinkedList());
+        playerTroops.put(comp, new LinkedList());
+    }
+    
+    public MainGamePanel(Player user, Player comp, Level lvl) {
+        user.clearObjects();
+        comp.clearObjects();
+        
+        playerTowers = new HashMap();
+        playerTowers.put(user, user.getTowers());
+        playerTowers.put(comp, comp.getTowers());
+        
+        playerTroops = new HashMap();
+        playerTroops.put(user, user.getTroops());
+        playerTroops.put(comp, comp.getTroops());
     }
 
-    public HashMap< Player, LinkedList<Tower> > getPlayerTowers() {
+    public HashMap< Player, List<Tower> > getPlayerTowers() {
         return playerTowers;
     }
 
-    public LinkedList<Tower> getPlayerTowers(Player owner) {
+    public List<Tower> getPlayerTowers(Player owner) {
         return playerTowers.get(owner);
     }
 
-    public HashMap< Player, LinkedList<Troops> > getPlayerTroops() {
+    public HashMap< Player, List<Troops> > getPlayerTroops() {
         return playerTroops;
     }
 
-    public LinkedList<Troops> getPlayerTroops(Player owner) {
+    public List<Troops> getPlayerTroops(Player owner) {
         return playerTroops.get(owner);
     }
 
     // wysyla wojska z wiez zrodlowych do wiezy docelowej
-    public void sendTroops(Integer percentageShare, LinkedList<Tower> sources, Tower destination) {
+    public void sendTroops(Integer percentageShare, List<Tower> sources, Tower destination) {
         for (Tower source : sources) {
             Troops bubble = source.sendTroops(percentageShare, destination);
             if (bubble != null) {
@@ -67,10 +82,10 @@ public class MainGamePanel {
     // TODO! metoda update, ktora update'uje wszystkie obiekty, a potem je rysuje
 
     public void changeOwner(Tower tower, Player oldOwner, Player newOwner) {
-        LinkedList<Tower> oldOwnerTowers = playerTowers.get(oldOwner);
+        List<Tower> oldOwnerTowers = playerTowers.get(oldOwner);
         oldOwnerTowers.remove(tower);
 
-        LinkedList<Tower> newOwnerTowers = playerTowers.get(newOwner);
+        List<Tower> newOwnerTowers = playerTowers.get(newOwner);
         newOwnerTowers.add(tower);
 
         if (oldOwnerTowers.isEmpty()) {
