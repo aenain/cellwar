@@ -15,12 +15,29 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.larvalabs.svgandroid.SVG;
 import com.larvalabs.svgandroid.SVGParser;
+import com.test.nanowar.model.Player;
 
 public class MainActivity extends Activity {
-
     protected RelativeLayout l;
 
-    protected void addTower(Point center, int radius, Integer troopsCount) {
+    protected void addTower(Point center, int radius, Integer troopsCount, Player owner) {
+        int outerResourceId, innerResourceId, textColor;
+
+        if (owner == Player.COMPUTER) {
+            outerResourceId = R.raw.celloutercomputer;
+            innerResourceId = R.raw.cellinnercomputer;
+            textColor = Color.rgb(255, 255, 255);
+        }
+        else if (owner == Player.USER) {
+            outerResourceId = R.raw.cellouteruser;
+            innerResourceId = R.raw.cellinneruser;
+            textColor = Color.rgb(16, 171, 226);
+        }
+        else {
+            outerResourceId = R.raw.cellouternone;
+            innerResourceId = R.raw.cellinnernone;
+            textColor = Color.rgb(255, 255, 255);
+        }
         if (l != null) {
             RelativeLayout.LayoutParams params;
             SVG svg;
@@ -35,14 +52,14 @@ public class MainActivity extends Activity {
 
             // outer background
             ImageView outerBackground = new ImageView(this);
-            svg = SVGParser.getSVGFromResource(getResources(), R.raw.towerouter);
+            svg = SVGParser.getSVGFromResource(getResources(), outerResourceId);
             outerBackground.setImageDrawable(svg.createPictureDrawable());
             params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
             tower.addView(outerBackground, params);
 
             // inner background
             ImageView innerBackground = new ImageView(this);
-            svg = SVGParser.getSVGFromResource(getResources(), R.raw.towerinter);
+            svg = SVGParser.getSVGFromResource(getResources(), innerResourceId);
             innerBackground.setImageDrawable(svg.createPictureDrawable());
             params = new RelativeLayout.LayoutParams(radius, radius);
             params.addRule(RelativeLayout.CENTER_IN_PARENT);
@@ -55,7 +72,7 @@ public class MainActivity extends Activity {
             TextView numberOfTroops = new TextView(this);
             numberOfTroops.setText(Integer.toString(troopsCount) + " ");
             numberOfTroops.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
-            numberOfTroops.setTextColor(Color.GRAY);
+            numberOfTroops.setTextColor(textColor);
             numberOfTroops.setTextSize(10);
             params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             params.addRule(RelativeLayout.CENTER_IN_PARENT);
@@ -98,8 +115,9 @@ public class MainActivity extends Activity {
         l.addView(imageView, mainParams);
 
         // towers
-        addTower(getPoint(50, 50), getRadius(8), 27);
-        addTower(getPoint(75, 75), getRadius(16), 135);
+        addTower(getPoint(50, 50), getRadius(8), 27, Player.USER);
+        addTower(getPoint(25, 50), getRadius(12), 48, null);
+        addTower(getPoint(75, 75), getRadius(16), 135, Player.COMPUTER);
     }
 
     @Override

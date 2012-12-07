@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1 Basic//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11-basic.dtd">
+<svg version="1.1" baseProfile="basic" id="player-tower"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="117.552px"
+	 height="117.552px" viewBox="0 0 117.552 117.552" xml:space="preserve">
+<radialGradient id="otoczka_wewnetrzna_1_" cx="58.7759" cy="58.7764" r="58.2759" gradientUnits="userSpaceOnUse">
+	<stop  offset="0.5517" style="stop-color:#EEE810"/>
+	<stop  offset="0.6154" style="stop-color:#EEE815"/>
+	<stop  offset="0.6871" style="stop-color:#EEE822"/>
+	<stop  offset="0.7628" style="stop-color:#EEE839"/>
+	<stop  offset="0.8413" style="stop-color:#EEE858"/>
+	<stop  offset="0.921" style="stop-color:#EEE881"/>
+	<stop  offset="1" style="stop-color:#EEE8B0"/>
+</radialGradient>
+<circle id="otoczka_wewnetrzna" fill="url(#otoczka_wewnetrzna_1_)" stroke="#EEE810" stroke-miterlimit="10" cx="58.776" cy="58.777" r="58.276"/>
+</svg>
