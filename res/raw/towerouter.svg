@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1 Basic//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11-basic.dtd">
+<svg version="1.1" baseProfile="basic" id="player-tower"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="215.334px"
+	 height="215.334px" viewBox="0 0 215.334 215.334" xml:space="preserve">
+<radialGradient id="otoczka-tlo_1_" cx="107.667" cy="107.667" r="106.667" gradientUnits="userSpaceOnUse">
+	<stop  offset="0.7709" style="stop-color:#FFFFFF;stop-opacity:0.1"/>
+	<stop  offset="1" style="stop-color:#FFFFFF;stop-opacity:0.4"/>
+</radialGradient>
+<circle id="otoczka-tlo" fill="url(#otoczka-tlo_1_)" cx="107.667" cy="107.665" r="106.667"/>
+<radialGradient id="podstawa-wiezy_1_" cx="132.167" cy="143.1675" r="58.2762" fx="182.6225" fy="172.3283" gradientUnits="userSpaceOnUse">
+	<stop  offset="0" style="stop-color:#1F5992"/>
+	<stop  offset="0.2696" style="stop-color:#20619A"/>
+	<stop  offset="0.691" style="stop-color:#2177AE"/>
+	<stop  offset="1" style="stop-color:#238CC1"/>
+</radialGradient>
+<circle id="podstawa-wiezy" display="none" fill="url(#podstawa-wiezy_1_)" cx="107.667" cy="107.668" r="58.276"/>
+<radialGradient id="otoczka_wewnetrzna_1_" cx="107.667" cy="107.6675" r="58.2761" gradientUnits="userSpaceOnUse">
+	<stop  offset="0.5517" style="stop-color:#FFFFFF;stop-opacity:0"/>
+	<stop  offset="1" style="stop-color:#FFFFFF;stop-opacity:0.3"/>
+</radialGradient>
+<circle id="otoczka_wewnetrzna" display="none" fill="url(#otoczka_wewnetrzna_1_)" stroke="#238CC1" stroke-miterlimit="10" cx="107.667" cy="107.668" r="58.276"/>
+<circle id="selection-mark" display="none" fill="none" stroke="#238CC1" stroke-width="2" stroke-miterlimit="10" cx="107.667" cy="107.667" r="106.667"/>
+</svg>
