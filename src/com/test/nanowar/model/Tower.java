@@ -111,11 +111,8 @@ public class Tower {
     protected void changeOwner(Player newOwner) {
         Player oldOwner = this.owner;
         this.owner = newOwner;
-        // TODO! update color
-
         panel.changeOwner(this, oldOwner, newOwner);
-        /*oldOwner.deleteTower(this);
-        newOwner.addTower(this);*/
+        view.changeOwner(newOwner);
     }
 
     // podczas rozgrywki należy używać metody changeOwner!

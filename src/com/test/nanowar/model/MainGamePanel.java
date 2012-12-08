@@ -4,7 +4,6 @@
  */
 package com.test.nanowar.model;
 
-import android.graphics.Point;
 import com.test.nanowar.MainLayout;
 import java.util.*;
 import java.util.Map.Entry;
@@ -164,7 +163,7 @@ public class MainGamePanel {
         level.setPanel(this);
         level.readData(layout.getContext());
 
-        // buildViews();
+        buildViews();
     }
 
     protected void buildViews() {

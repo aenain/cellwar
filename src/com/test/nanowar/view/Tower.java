@@ -23,9 +23,9 @@ import com.test.nanowar.model.Player;
  * @author artur
  */
 public class Tower extends RelativeLayout {
-
-    public static final int MIN_RADIUS_PERCENTAGE = 8;
+    public static final int MIN_RADIUS_PERCENTAGE = 6;
     public static final int MAX_RADIUS_PERCENTAGE = 16;
+
     protected SVG innerResource, outerResource;
     protected int textColor;
     protected com.test.nanowar.model.Tower model;
@@ -116,6 +116,12 @@ public class Tower extends RelativeLayout {
         this.center = center;
     }
 
+    public void changeOwner(Player owner) {
+        setOwner(owner);
+        innerBackground.setImageDrawable(innerResource.createPictureDrawable());
+        outerBackground.setImageDrawable(outerResource.createPictureDrawable());
+    }
+
     public void setOwner(Player owner) {
         if (owner.isComputer()) {
             setOuterResource(R.raw.celloutercomputer);
@@ -134,16 +140,23 @@ public class Tower extends RelativeLayout {
 
     // w procentach
     public double computeExternalRadius() {
-        return Math.max(Math.sqrt(model.getCapacity() / com.test.nanowar.model.Tower.MAX_CAPACITY) * Tower.MAX_RADIUS_PERCENTAGE, Tower.MIN_RADIUS_PERCENTAGE);
+        double ratio = Math.sqrt((double)model.getCapacity() / com.test.nanowar.model.Tower.MAX_CAPACITY);
+        return Math.max(ratio * Tower.MAX_RADIUS_PERCENTAGE, Tower.MIN_RADIUS_PERCENTAGE);
     }
 
     // w procentach
     public double computeInternalRadius() {
-        return Math.min(Tower.MAX_RADIUS_PERCENTAGE, Math.max(Math.sqrt(model.getTroopsCount() / model.getCapacity()) * computeExternalRadius(), Tower.MIN_RADIUS_PERCENTAGE));
+        double ratio = Math.sqrt((double)model.getTroopsCount() / model.getCapacity());
+        return Math.min(Tower.MAX_RADIUS_PERCENTAGE, Math.max(ratio * computeExternalRadius(), Tower.MIN_RADIUS_PERCENTAGE));
     }
 
     public void update() {
-        // TODO!
+        ViewGroup.LayoutParams params = innerBackground.getLayoutParams();
+        int actualRadius = layout.getRadius(computeInternalRadius());
+        params.height = 2 * actualRadius;
+        params.width = 2 * actualRadius;
+        innerBackground.setLayoutParams(params);
+        count.setText(model.getTroopsCount().toString());
     }
 
     protected void setModel(com.test.nanowar.model.Tower model) {
