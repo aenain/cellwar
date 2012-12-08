@@ -4,6 +4,7 @@
  */
 package com.test.nanowar.model;
 
+import android.util.Log;
 import com.test.nanowar.MainLayout;
 import java.util.*;
 import java.util.Map.Entry;
@@ -125,7 +126,6 @@ public class MainGamePanel {
                 Troops troop = troops.get(i);
                 if (troop.destinationReached()) {
                     troop.getDestination().troopsArrived(troop);
-                    troops.remove(i);
                 } else {
                     i++;
                 }
@@ -153,9 +153,12 @@ public class MainGamePanel {
     public void sendTroops(Integer percentageShare, List<Tower> sources, Tower destination) {
         for (Tower source : sources) {
             Troops bubble = source.sendTroops(percentageShare, destination);
+            com.test.nanowar.view.Troops troopsView = com.test.nanowar.view.Troops.createForPlayer(bubble, layout);
+            bubble.setView(troopsView);
             if (bubble != null) {
                 playerTroops.get(source.getOwner()).add(bubble);
             }
+            Log.d("wysylam troopsy", "poszly");
         }
     }
 

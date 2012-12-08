@@ -6,6 +6,7 @@ package com.test.nanowar.model;
 
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.util.Log;
 
 /**
  *
@@ -71,12 +72,12 @@ public class Tower {
 
     // w kazdej iteracji liczba jednostek rosnie
     public void update() {
-        //if(troopsCount < capacity) {
+        if(troopsCount < capacity) {
             double deltaCountPerFrame = (double)capacity / 2000;
             internalTroopsCount += deltaCountPerFrame;
             troopsCount = (int)Math.floor(internalTroopsCount);
-        //}
-        
+        }
+
         view.post(new Runnable() {
             public void run() {
                 view.update();
@@ -96,7 +97,8 @@ public class Tower {
             bubble = new Troops(owner, count, this.relativeCenter);
             bubble.sendBetween(this, destination);
         }
-
+        
+        Log.d("liczymy", bubble.count.toString());
         return bubble;
     }
 

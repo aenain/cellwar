@@ -8,6 +8,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -50,7 +51,7 @@ public class Troops extends RelativeLayout {
     }
 
     public static Troops createForPlayer(com.test.nanowar.model.Troops model, MainLayout layout) {
-        Troops troops = new Troops(layout.getContext());
+        Troops troops = new Troops(layout);
         troops.setModel(model);
         troops.setOwner(model.getOwner());
         //troops.init(layout);
@@ -63,6 +64,8 @@ public class Troops extends RelativeLayout {
         Point dest = model.getDestination().getView().getCenter();
         troops.setStep(new RealPoint(dest.x - realCenter.getX(), dest.y - realCenter.getY()).normalise());
         troops.buildView();
+        
+        Log.d("kolejny count", model.count().toString());
 
         return troops;
     }
@@ -70,17 +73,15 @@ public class Troops extends RelativeLayout {
     public void setOwner(Player owner) {
         if (owner.isComputer()) {
             setResource(R.raw.cellinnercomputer);
-            setTextColor(Color.WHITE);
+            textColor = Color.WHITE;
         } else if(owner.isUser()) {
             setResource(R.raw.cellinneruser);
-            setTextColor(Color.WHITE);
+            textColor = Color.WHITE;
         }
         else {
-        setResource(R.raw.cellinnernone);
-        setTextColor(Color.WHITE);
+            setResource(R.raw.cellinnernone);
+            textColor = Color.WHITE;
         }
-
-        background.setImageDrawable(resource.createPictureDrawable());
     }
 
     protected void setModel(com.test.nanowar.model.Troops model) {
@@ -132,19 +133,35 @@ public class Troops extends RelativeLayout {
     protected void buildContainer() {
         // troops container
         int actualRadius = layout.getRadius(computeRadius());
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(actualRadius, actualRadius);
+        final RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(actualRadius, actualRadius);
         params.alignWithParent = true;
         params.leftMargin = center.x - actualRadius;
         params.topMargin = center.y - actualRadius;
-        layout.addView(this, params);
+        
+        final Troops temp = this;
+        layout.post(new Runnable() {
+            public void run() {
+                layout.addView(temp, params);
+            }
+        });
+        
+        //layout.addView(this, params);
     }
 
     protected void buildBackground() {
         background = new ImageView(layout.getContext());
         background.setImageDrawable(resource.createPictureDrawable());
 
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-        this.addView(background, params);
+        final RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+
+        final Troops temp = this;
+        this.post(new Runnable() {
+            public void run() {
+                temp.addView(background, params);
+            }
+        });
+        
+        //this.addView(background, params);
     }
 
     protected void buildCountElement() {
@@ -154,9 +171,19 @@ public class Troops extends RelativeLayout {
         count.setTextColor(textColor);
         count.setTextSize(10);
 
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        final RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.CENTER_IN_PARENT);
+        
+        final Troops temp = this;
+        this.post(new Runnable() {
+            public void run() {
+                temp.addView(count, params);
+            }
+        });
+        
         this.addView(count, params);
+        
+        Log.d("tutajTezLicze", Integer.toString(model.count()));
     }
 
     /*protected void init(Context context, MainLayout layout) {
@@ -188,7 +215,8 @@ public class Troops extends RelativeLayout {
         params.topMargin = center.y - actualRadius;
         layout.updateViewLayout(this, params);
         
-        
+        //Log.d("position", "x :" + realCenter.getX() + " y: " + realCenter.getY());
+        //Log.d("step", "x :" + step.getX() + " y: " + step.getY());
     }
     
     public boolean destinationReached() {

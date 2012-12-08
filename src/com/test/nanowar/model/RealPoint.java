@@ -57,8 +57,8 @@ public class RealPoint {
     
     public RealPoint normalise() {
         double len = getLength();
-        x /= (LEN/len);
-        y /= (LEN/len);
+        x /= (len/LEN);
+        y /= (len/LEN);
         
         return new RealPoint(x, y);
     }

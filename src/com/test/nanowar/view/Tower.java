@@ -123,8 +123,20 @@ public class Tower extends RelativeLayout {
 
     public void changeOwner(Player owner) {
         setOwner(owner);
-        innerBackground.setImageDrawable(innerResource.createPictureDrawable());
-        outerBackground.setImageDrawable(outerResource.createPictureDrawable());
+        
+        innerBackground.post(new Runnable() {
+            public void run() {
+                innerBackground.setImageDrawable(innerResource.createPictureDrawable());
+            }
+        });
+        outerBackground.post(new Runnable() {
+            public void run() {
+                outerBackground.setImageDrawable(outerResource.createPictureDrawable());
+            }
+        });
+        
+        /*innerBackground.setImageDrawable(innerResource.createPictureDrawable());
+        outerBackground.setImageDrawable(outerResource.createPictureDrawable());*/
     }
 
     public void setOwner(Player owner) {
@@ -161,7 +173,7 @@ public class Tower extends RelativeLayout {
         params.height = 2 * actualRadius;
         params.width = 2 * actualRadius;
         innerBackground.setLayoutParams(params);
-        Log.d("setter", model.getTroopsCount().toString());
+        //Log.d("setter", model.getTroopsCount().toString());
         count.setText(model.getTroopsCount().toString());
     }
 
