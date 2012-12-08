@@ -7,9 +7,7 @@ package com.test.nanowar.view;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.util.Log;
 import android.view.Gravity;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -168,12 +166,11 @@ public class Tower extends RelativeLayout {
     }
 
     public void update() {
-        ViewGroup.LayoutParams params = innerBackground.getLayoutParams();
         int actualRadius = layout.getRadius(computeInternalRadius());
-        params.height = 2 * actualRadius;
-        params.width = 2 * actualRadius;
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(actualRadius, actualRadius);
+        params.addRule(RelativeLayout.CENTER_IN_PARENT);
         innerBackground.setLayoutParams(params);
-        //Log.d("setter", model.getTroopsCount().toString());
+
         count.setText(model.getTroopsCount().toString());
     }
 
