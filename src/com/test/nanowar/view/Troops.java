@@ -30,6 +30,7 @@ public class Troops extends RelativeLayout {
     protected SVG resource;
     protected ImageView background;
     protected TextView count;
+    protected int textColor;
     protected com.test.nanowar.model.Troops model;
     
     protected Point center;
@@ -119,7 +120,7 @@ public class Troops extends RelativeLayout {
     }
 
     protected void buildContainer() {
-        // tower container
+        // troops container
         int actualRadius = layout.getRadius(computeRadius());
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(actualRadius, actualRadius);
         params.alignWithParent = true;
@@ -129,23 +130,23 @@ public class Troops extends RelativeLayout {
     }
 
     protected void buildBackground() {
-        /*background = new ImageView(layout.getContext());
-        background.setImageDrawable(outerResource.createPictureDrawable());
+        background = new ImageView(layout.getContext());
+        background.setImageDrawable(resource.createPictureDrawable());
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-        this.addView(outerBackground, params);*/
+        this.addView(background, params);
     }
 
     protected void buildCountElement() {
-        /*count = new TextView(layout.getContext());
-        count.setText(Integer.toString(model.getTroopsCount()) + " ");
+        count = new TextView(layout.getContext());
+        count.setText(Integer.toString(model.count()) + " ");
         count.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
         count.setTextColor(textColor);
         count.setTextSize(10);
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.CENTER_IN_PARENT);
-        this.addView(count, params);*/
+        this.addView(count, params);
     }
 
     /*protected void init(Context context, MainLayout layout) {
