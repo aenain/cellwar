@@ -26,6 +26,9 @@ public class MainThread extends Thread {
     public void run() {
         while (running) {
             gamePanel.update();
+             try {
+               sleep(20);
+           } catch (InterruptedException ex) {}
         }
     }
 }

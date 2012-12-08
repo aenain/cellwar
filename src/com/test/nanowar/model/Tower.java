@@ -71,9 +71,11 @@ public class Tower {
 
     // w kazdej iteracji liczba jednostek rosnie
     public void update() {
-        double deltaCountPerFrame = capacity / 200;
-        internalTroopsCount += deltaCountPerFrame;
-        troopsCount = (int)Math.floor(internalTroopsCount);
+        //if(troopsCount < capacity) {
+            double deltaCountPerFrame = (double)capacity / 2000;
+            internalTroopsCount += deltaCountPerFrame;
+            troopsCount = (int)Math.floor(internalTroopsCount);
+        //}
         
         view.post(new Runnable() {
             public void run() {
