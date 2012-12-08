@@ -119,6 +119,8 @@ public class Tower {
         }
 
         panel.getPlayerTroops(bubble.getOwner()).remove(bubble);
+        
+        bubble.getView().remove();
     }
 
     protected void changeOwner(Player newOwner) {

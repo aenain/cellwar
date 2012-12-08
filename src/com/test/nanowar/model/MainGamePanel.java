@@ -118,6 +118,7 @@ public class MainGamePanel {
         }
     }
 
+    
     public void handleCollisions() {
         Set<Player> players = playerTroops.keySet();
         for (Player player : players) {

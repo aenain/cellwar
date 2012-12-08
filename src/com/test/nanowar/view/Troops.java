@@ -10,6 +10,7 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -203,6 +204,7 @@ public class Troops extends RelativeLayout {
     }
     
     public void update() {
+        
         realCenter.add(step);
         center.x = (int)Math.floor(realCenter.getX());
         center.y = (int)Math.floor(realCenter.getY());
@@ -217,6 +219,16 @@ public class Troops extends RelativeLayout {
         
         //Log.d("position", "x :" + realCenter.getX() + " y: " + realCenter.getY());
         //Log.d("step", "x :" + step.getX() + " y: " + step.getY());
+        
+    }
+    
+    public void remove() {
+        final Troops temp = this;
+        ((ViewGroup)this.getParent()).post(new Runnable() {
+            public void run() {
+                ((ViewGroup)temp.getParent()).removeView(temp);
+            }
+        });
     }
     
     public boolean destinationReached() {

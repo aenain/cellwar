@@ -91,5 +91,4 @@ public class Troops extends GameObject {
         this.view = view;
     }
     
-    
 }
