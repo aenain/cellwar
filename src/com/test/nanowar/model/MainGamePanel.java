@@ -6,31 +6,28 @@ package com.test.nanowar.model;
 
 import android.graphics.Point;
 import com.test.nanowar.MainLayout;
-import com.test.nanowar.model.Player.PlayerType;
 import java.util.*;
 import java.util.Map.Entry;
 
 /**
  *
- * @author artur
- * klasa reprezentujaca wszystko, co zwiazane z pojedynczym levelem gry
- * odpowiada za:
- * - utworzenie wież (tower) w odpowiednich miejscach
+ * @author artur klasa reprezentujaca wszystko, co zwiazane z pojedynczym
+ * levelem gry odpowiada za: - utworzenie wież (tower) w odpowiednich miejscach
  * - sprawdzanie warunku zakonczenia (wszystkie wieze naleza do ktoregos gracza)
- * - informacje o rezultacie (zbudowanie okienka i wyswietlenie rezultatu)
- * - zarzadza gra
+ * - informacje o rezultacie (zbudowanie okienka i wyswietlenie rezultatu) -
+ * zarzadza gra
  */
 public class MainGamePanel {
-    protected HashMap< Player, List<Tower> > playerTowers;
-    protected HashMap< Player, List<Troops> > playerTroops;
+
+    protected HashMap< Player, List<Tower>> playerTowers;
+    protected HashMap< Player, List<Troops>> playerTroops;
     protected MainLayout layout;
     protected Level level;
     protected MainThread thread;
     protected Player userPlayer, computerPlayer, nonePlayer;
 
-    public MainGamePanel(MainLayout layout, Level level) {
+    public MainGamePanel(MainLayout layout, int levelNumber) {
         this.layout = layout;
-        this.level = level;
 
         userPlayer = new Player(Player.PlayerType.USER);
         computerPlayer = new Player(Player.PlayerType.COMPUTER);
@@ -45,16 +42,18 @@ public class MainGamePanel {
         playerTroops.put(userPlayer, new LinkedList());
         playerTowers.put(nonePlayer, new LinkedList());
         playerTroops.put(computerPlayer, new LinkedList());
+
+        this.level = new Level(levelNumber);
     }
-    
+
     public MainGamePanel(Player user, Player comp, Level lvl) {
         /*user.clearObjects();
-        comp.clearObjects();*/
-        
+         comp.clearObjects();*/
+
         playerTowers = new HashMap();
         playerTowers.put(user, user.getTowers());
         playerTowers.put(comp, comp.getTowers());
-        
+
         playerTroops = new HashMap();
         playerTroops.put(user, user.getTroops());
         playerTroops.put(comp, comp.getTroops());
@@ -99,74 +98,71 @@ public class MainGamePanel {
         handleCollisions();
         updateTowersLists();
     }
-    
+
     public void updateTroops() {
         Set<Player> players = playerTroops.keySet();
-        for(Player player : players) {
+        for (Player player : players) {
             List<Troops> troops = playerTroops.get(player);
-            for(Troops troop : troops) {
+            for (Troops troop : troops) {
                 troop.update();
             }
         }
     }
-    
+
     public void updateTowers() {
         Set<Player> players = playerTowers.keySet();
-        for(Player player : players) {
+        for (Player player : players) {
             List<Tower> towerList = playerTowers.get(player);
-            for(Tower tower : towerList) {
+            for (Tower tower : towerList) {
                 tower.update();
             }
         }
     }
-    
+
     public void handleCollisions() {
         Set<Player> players = playerTroops.keySet();
-        for(Player player : players) {
+        for (Player player : players) {
             List<Troops> troops = playerTroops.get(player);
-            for(int i = 0; i < troops.size();) {
+            for (int i = 0; i < troops.size();) {
                 Troops troop = troops.get(i);
-                if(troop.destinationReached()) {
+                if (troop.destinationReached()) {
                     troop.getDestination().troopsArrived(troop);
                     troops.remove(i);
-                } 
-                else {
+                } else {
                     i++;
-                }               
+                }
             }
         }
     }
-    
+
     public void updateTowersLists() {
-        HashMap<Player, List<Tower> > tempPlayTowers = new HashMap();
+        HashMap<Player, List<Tower>> tempPlayTowers = new HashMap();
         tempPlayTowers.put(userPlayer, new ArrayList());
         tempPlayTowers.put(computerPlayer, new ArrayList());
         tempPlayTowers.put(nonePlayer, new ArrayList());
-        
-        Iterator< Entry < Player, List<Tower> > > iter;
-        for(iter = playerTowers.entrySet().iterator(); iter.hasNext(); ) {
-            Entry < Player, List<Tower> > entry = iter.next();
-            
-            Iterator<Tower> listIter ;
-            for(listIter = entry.getValue().iterator(); listIter.hasNext(); ) {
+
+        Iterator< Entry< Player, List<Tower>>> iter;
+        for (iter = playerTowers.entrySet().iterator(); iter.hasNext();) {
+            Entry< Player, List<Tower>> entry = iter.next();
+
+            Iterator<Tower> listIter;
+            for (listIter = entry.getValue().iterator(); listIter.hasNext();) {
                 Tower tower = listIter.next();
-                
-                if(tower.getOwner().isComputer()) {
+
+                if (tower.getOwner().isComputer()) {
                     tempPlayTowers.get(computerPlayer).add(tower);
-                }
-                else if(tower.getOwner().isUser()) {
+                } else if (tower.getOwner().isUser()) {
                     tempPlayTowers.get(userPlayer).add(tower);
-                }
-                else if(tower.getOwner().isNone()) {
+                } else if (tower.getOwner().isNone()) {
                     tempPlayTowers.get(nonePlayer).add(tower);
                 }
             }
         }
-        
+
         playerTowers = tempPlayTowers;
     }
 
-    public HashMap< Player, List<Tower> > getPlayerTowers() {
+    public HashMap< Player, List<Tower>> getPlayerTowers() {
         return playerTowers;
     }
 
@@ -174,7 +170,7 @@ public class MainGamePanel {
         return playerTowers.get(owner);
     }
 
-    public HashMap< Player, List<Troops> > getPlayerTroops() {
+    public HashMap< Player, List<Troops>> getPlayerTroops() {
         return playerTroops;
     }
 
@@ -193,18 +189,22 @@ public class MainGamePanel {
     }
 
     public void initLevel() {
-        Iterator< Entry < Player, List<Tower> > > iter;
-        for(iter = playerTowers.entrySet().iterator(); iter.hasNext(); ) {
-            Entry < Player, List<Tower> > entry = iter.next();
-            if(entry.getKey().isComputer() && level != null) {
-                entry.setValue(level.getComputerTowers());
+        level.setPanel(this);
+        level.readData(layout.getContext());
+
+        buildViews();
+    }
+
+    protected void buildViews() {
+        Iterator< Entry< Player, List<Tower>>> iter;
+
+        for (iter = playerTowers.entrySet().iterator(); iter.hasNext();) {
+            Entry< Player, List<Tower>> entry = iter.next();
+            for (Tower towerModel : entry.getValue()) {
+                com.test.nanowar.view.Tower towerView = com.test.nanowar.view.Tower.createForModel(towerModel, layout.getContext());
+                towerModel.createRectangle();
+                towerModel.addView(towerView);
             }
-            else if(entry.getKey().isUser() && level != null) {
-                entry.setValue(level.getUserTowers());
-            }
-            else if(entry.getKey().isNone() && level != null) {
-                entry.setValue(level.getNobodyTowers());
-            } 
         }
     }
 

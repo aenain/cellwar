@@ -4,31 +4,92 @@
  */
 package com.test.nanowar.model;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
+import android.content.Context;
+import android.graphics.Point;
+import android.util.Log;
+import com.test.nanowar.utils.JSONReader;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  *
  * @author artur
- * klasa reprezentujaca dany poziom: zawiera informacje o wielkosci i rozmieszczeniu wiez,
- * wymagania czasowe na gwiazdki, bestScore (ile gwiazdek), nazwa lvl-u, thumbnail
- * odpowiada za wczytanie informacji o levelu zapisanych w json-ie czy czymś.
+ * klasa reprezentujaca dany poziom: zawiera informacje o wymaganiach czasowych na kolejne
+ * gwiazdki, bestScore (ile gwiazdek), nazwa lvl-u, thumbnail
+ * odpowiada za wczytanie informacji o levelu zapisanych w json-ie do panelu.
  */
 public class Level {
-    
     protected String levelName;
     protected int number;
     protected int bestScore, bestTime;
-    protected int timeRequirement[] = new int[3];
-    protected ArrayList<Tower> userTowers;
-    protected ArrayList<Tower> computerTowers;
-    protected ArrayList<Tower> nobodyTowers;
+    protected int timeRequirements[] = new int[3];
+    protected MainGamePanel panel;
 
     public Level(int number) {
         this.number = number;
-        userTowers = new ArrayList();
-        computerTowers = new ArrayList();
-        nobodyTowers = new ArrayList();
+    }
+
+    public void setPanel(MainGamePanel panel) {
+        this.panel = panel;
+    }
+
+    // wczytuje dane z jsona i inicjalizuje wszystkie pola (poza bestScore i bestTime)
+    public void readData(Context context) {
+        if (panel == null) { return; }
+
+        JSONReader reader = new JSONReader(context);
+        JSONObject data = reader.getLevelData(number);
+
+        try {
+            // level name
+            setLevelName(data.getString("name"));
+            
+            // time requirements
+            JSONArray rawRequirements = data.getJSONArray("timeRequirements");
+            for (int i = 0; i < timeRequirements.length; i++) {
+                timeRequirements[i] = rawRequirements.optInt(i, 0);
+            }
+
+            // towers
+            JSONArray rawTowers = data.getJSONArray("towers");
+            JSONObject raw;
+            com.test.nanowar.model.Tower tower;
+            JSONArray coordinates;
+            Point center;
+            String ownerName;
+            for (int i = 0; i < rawTowers.length(); i++) {
+                raw = rawTowers.getJSONObject(i);
+                tower = new com.test.nanowar.model.Tower();
+
+                // relative location of the center point
+                coordinates = raw.getJSONArray("location");
+                center = new Point(coordinates.getInt(0), coordinates.getInt(1));
+                tower.setRelativeCenter(center);
+
+                // capacity & troopsCount
+                tower.setCapacity(raw.getInt("capacity"));
+                tower.setInitTroopsCount(raw.getInt("initTroopsCount"));
+
+                // owner name
+                ownerName = raw.optString("player", "none");
+
+                if (ownerName.equals("user")) {
+                    tower.setOwner(panel.userPlayer);
+                    panel.getPlayerTowers(panel.userPlayer).add(tower);
+                }
+                else if (ownerName.equals("computer")) {
+                    tower.setOwner(panel.computerPlayer);
+                    panel.getPlayerTowers(panel.computerPlayer).add(tower);
+                }
+                else {
+                    tower.setOwner(panel.nonePlayer);
+                    panel.getPlayerTowers(panel.nonePlayer).add(tower);
+                }
+            }
+        } catch(JSONException ex) {
+            Log.e("Level", "reading level data error", ex);
+        }
     }
 
     public int getBestScore() {
@@ -47,12 +108,12 @@ public class Level {
         this.levelName = levelName;
     }
 
-    public int[] getTimeRequirement() {
-        return timeRequirement;
+    public int[] getTimeRequirements() {
+        return timeRequirements;
     }
 
-    public void setTimeRequirement(int[] timeRequirement) {
-        this.timeRequirement = timeRequirement;
+    public void setTimeRequirements(int[] timeRequirements) {
+        this.timeRequirements = timeRequirements;
     }
 
     public int getBestTime() {
@@ -62,43 +123,4 @@ public class Level {
     public void setBestTime(int bestTime) {
         this.bestTime = bestTime;
     }
-
-    public ArrayList<Tower> getComputerTowers() {
-        return computerTowers;
-    }
-
-    public void setComputerTowers(ArrayList<Tower> computerTowers) {
-        this.computerTowers = computerTowers;
-    }
-
-    public ArrayList<Tower> getUserTowers() {
-        return userTowers;
-    }
-
-    public void setUserTowers(ArrayList<Tower> userTowers) {
-        this.userTowers = userTowers;
-    }
-
-    public ArrayList<Tower> getNobodyTowers() {
-        return nobodyTowers;
-    }
-
-    public void setNobodyTowers(ArrayList<Tower> nobodyTowers) {
-        this.nobodyTowers = nobodyTowers;
-    }
-    
-    /*public void setPlayersTowers(Player user, Player comp, Player none) {
-        if(user.isUser()) {
-            user.clearObjects();
-            user.setTowers(userTowers);
-        }
-        if(comp.isComputer()) {
-            comp.clearObjects();
-            comp.setTowers(computerTowers);
-        }
-        if(none.isNone()) {
-            none.clearObjects();
-            none.setTowers(nobodyTowers);
-        }
-    }*/
 }

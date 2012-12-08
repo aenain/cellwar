@@ -1,0 +1,28 @@
+{
+    "name": "You can do it!",
+    "timeRequirements": [
+        90,
+        60,
+        30
+    ],
+    "towers": [
+        {
+            "location": [25, 25],
+            "capacity": 50,
+            "initTroopsCount": 20,
+            "player": "user"
+        },
+        {
+            "location": [50, 50],
+            "capacity": 30,
+            "initTroopsCount": 5,
+            "player": "computer"
+        },
+        {
+            "location": [75, 75],
+            "capacity": 20,
+            "initTroopsCount": 15,
+            "player": "none"
+        }
+    ]
+}

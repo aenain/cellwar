@@ -6,7 +6,6 @@ package com.test.nanowar.model;
 
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.view.ViewGroup;
 
 /**
  *
@@ -23,24 +22,53 @@ public class Tower extends GameObject {
 
     protected double internalTroopsCount;
 
-    protected MainGamePanel level;
+    protected MainGamePanel panel;
     protected Rect internalLocation;
+    protected com.test.nanowar.view.Tower view;
 
-    public Tower(Player owner, Integer capacity, int initTroopsCount, Point center, MainGamePanel level) {
+    // in percentage of width and height of the screen
+    protected Point relativeCenter;
+
+    public Tower() {
+        super(null, null);
+    }
+
+    public Tower(Player owner, Integer capacity, int initTroopsCount, Point center, MainGamePanel panel) {
         super(owner, center);
         this.capacity = capacity;
         this.troopsCount = initTroopsCount;
         this.internalTroopsCount = initTroopsCount;
-        this.level = level;
+        this.panel = panel;
         updateLocation(getRadius());
 
         internalLocation = new Rect(center.y + getInternalRadius(), center.x - getInternalRadius(), center.x + getInternalRadius(), center.y + getInternalRadius());
+    }
+
+    public void createRectangle() {
+        // TODO!
+    }
+
+    public void addView(com.test.nanowar.view.Tower view) {
+        this.view = view;
+    }
+
+    public void setRelativeCenter(Point center) {
+        this.relativeCenter = center;
     }
 
     public Integer getCapacity() {
         return capacity;
     }
 
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public void setInitTroopsCount(int count) {
+        this.troopsCount = count;
+        this.internalTroopsCount = count;
+    }
+    
     public Integer getTroopsCount() {
         return troopsCount;
     }
@@ -98,7 +126,7 @@ public class Tower extends GameObject {
             }
         }
 
-        level.getPlayerTroops(bubble.getOwner()).remove(bubble);
+        panel.getPlayerTroops(bubble.getOwner()).remove(bubble);
     }
 
     protected void changeOwner(Player newOwner) {
@@ -106,9 +134,15 @@ public class Tower extends GameObject {
         this.owner = newOwner;
         // TODO! update color
 
-        level.changeOwner(this, oldOwner, newOwner);
+        panel.changeOwner(this, oldOwner, newOwner);
         /*oldOwner.deleteTower(this);
         newOwner.addTower(this);*/
+    }
+
+    // podczas rozgrywki należy używać metody changeOwner!
+    // tej metody można użyć podczas inicjalizacji obiektu przed pojawieniem się go na ekranie
+    public void setOwner(Player owner) {
+        this.owner = owner;
     }
 
     public Player getOwner() {

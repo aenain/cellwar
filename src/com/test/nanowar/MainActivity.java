@@ -120,8 +120,7 @@ public class MainActivity extends Activity {
 
         // models
         int levelNumber = 10;
-        Level level = new Level(levelNumber);
-        MainGamePanel gamePanel = new MainGamePanel(layout, level);
+        MainGamePanel gamePanel = new MainGamePanel(layout, levelNumber);
         gamePanel.initLevel();
         gamePanel.startGame();
     }
