@@ -5,9 +5,7 @@
 package com.test.nanowar.model;
 
 import android.graphics.Point;
-import android.graphics.Rect;
 import android.util.Log;
-import static java.lang.Math.*;
 
 /**
  *

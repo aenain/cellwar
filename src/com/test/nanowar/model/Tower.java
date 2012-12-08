@@ -10,35 +10,42 @@ import android.util.Log;
 
 /**
  *
- * @author artur
- * klasa reprezentujaca wszystko, co zwiazane z duza komorka (nazwana wieza)
- * 
+ * @author artur klasa reprezentujaca wszystko, co zwiazane z duza komorka
+ * (nazwana wieza)
+ *
  */
 public class Tower {
-    public static final int MAX_CAPACITY = 100;
 
+    public enum Selection {
+        SELECTED, NONE
+    }
+
+    public static final int MAX_CAPACITY = 100;
     // określa wielkosc wiezy (pojemnosc), w ktorej szybkosc powstawania jednostek jest
     // proporcjonalna do wielkosci.
     protected Integer capacity,
-    // okresla aktualna ilosc wojsk w wiezy, nie moze przekroczyc _capacity_
-                      troopsCount;
-
+            // okresla aktualna ilosc wojsk w wiezy, nie moze przekroczyc _capacity_
+            troopsCount;
     protected double internalTroopsCount;
-
     protected MainGamePanel panel;
     protected Rect location;
     protected com.test.nanowar.view.Tower view;
-
+    protected Selection selection;
     // in percentage of width and height of the screen
     protected Point relativeCenter;
     protected Player owner;
 
     public Tower(MainGamePanel panel) {
         this.panel = panel;
+        // this.selection = Selection.NONE;
     }
 
     public void addView(com.test.nanowar.view.Tower view) {
         this.view = view;
+    }
+
+    public MainGamePanel getGamePanel() {
+        return panel;
     }
 
     public Point getRelativeCenter() {
@@ -65,7 +72,7 @@ public class Tower {
         this.troopsCount = count;
         this.internalTroopsCount = count;
     }
-    
+
     public Integer getTroopsCount() {
         return troopsCount;
     }
@@ -91,8 +98,8 @@ public class Tower {
      */
     public Troops sendTroops(Integer percentageShare, Tower destination) {
         Troops bubble = null;
-        int count = (int)Math.floor(troopsCount * percentageShare / 100);
-        
+        int count = (int) Math.floor(troopsCount * percentageShare / 100);
+
         if (count > 0) {
             bubble = new Troops(owner, count, this.relativeCenter);
             bubble.sendBetween(this, destination);
@@ -108,8 +115,7 @@ public class Tower {
     public void troopsArrived(Troops bubble) {
         if (owner == bubble.getOwner()) {
             troopsCount += bubble.count();
-        }
-        else {
+        } else {
             troopsCount -= bubble.count();
             // jesli bylo wiecej jednostek wroga, to nastepuje przejecie wiezy
             if (troopsCount < 0) {
@@ -121,6 +127,22 @@ public class Tower {
         panel.getPlayerTroops(bubble.getOwner()).remove(bubble);
         
         bubble.getView().remove();
+    }
+
+    public Selection select(final Selection selection) {
+        this.selection = selection;
+
+        view.post(new Runnable() {
+            public void run() {
+                view.select(selection);
+            }
+        });
+
+        return this.selection;
+    }
+
+    public boolean isSelected() {
+        return (selection == Selection.SELECTED);
     }
 
     protected void changeOwner(Player newOwner) {
@@ -139,5 +161,4 @@ public class Tower {
     public Player getOwner() {
         return owner;
     }
-    
 }

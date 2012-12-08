@@ -28,7 +28,7 @@ import com.test.nanowar.model.RealPoint;
 public class Troops extends RelativeLayout {
     
     public static final int MIN_RADIUS_PERCENTAGE = 3;
-    public static final int MAX_RADIUS_PERCENTAGE = 10;
+    public static final int MAX_RADIUS_PERCENTAGE = 8;
 
     protected SVG resource;
     protected ImageView background;
@@ -55,7 +55,6 @@ public class Troops extends RelativeLayout {
         Troops troops = new Troops(layout);
         troops.setModel(model);
         troops.setOwner(model.getOwner());
-        //troops.init(layout);
 
         troops.setCenter(layout.convertToPx(model.getRelativeCenter()));
         RealPoint realCenter = new RealPoint(troops.getCenter());
@@ -153,16 +152,8 @@ public class Troops extends RelativeLayout {
         background = new ImageView(layout.getContext());
         background.setImageDrawable(resource.createPictureDrawable());
 
-        final RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-
-        final Troops temp = this;
-        this.post(new Runnable() {
-            public void run() {
-                temp.addView(background, params);
-            }
-        });
-        
-        //this.addView(background, params);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+        this.addView(background, params);
     }
 
     protected void buildCountElement() {
@@ -172,15 +163,8 @@ public class Troops extends RelativeLayout {
         count.setTextColor(textColor);
         count.setTextSize(10);
 
-        final RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.CENTER_IN_PARENT);
-        
-        final Troops temp = this;
-        this.post(new Runnable() {
-            public void run() {
-                temp.addView(count, params);
-            }
-        });
         
         this.addView(count, params);
         

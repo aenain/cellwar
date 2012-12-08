@@ -20,6 +20,7 @@ import java.util.Map.Entry;
 public class MainGamePanel {
 
     protected HashMap< Player, List<Tower>> playerTowers;
+    protected HashMap< Player, List<Tower>> selectedPlayerTowers;
     protected HashMap< Player, List<Troops>> playerTroops;
     protected MainLayout layout;
     protected Level level;
@@ -38,9 +39,14 @@ public class MainGamePanel {
         playerTowers.put(nonePlayer, new LinkedList());
         playerTowers.put(computerPlayer, new LinkedList());
 
+        selectedPlayerTowers = new HashMap();
+        selectedPlayerTowers.put(userPlayer, new LinkedList());
+        selectedPlayerTowers.put(nonePlayer, new LinkedList());
+        selectedPlayerTowers.put(computerPlayer, new LinkedList());
+
         playerTroops = new HashMap();
         playerTroops.put(userPlayer, new LinkedList());
-        playerTowers.put(nonePlayer, new LinkedList());
+        playerTroops.put(nonePlayer, new LinkedList()); // NOTE: to chyba zbedne, right?
         playerTroops.put(computerPlayer, new LinkedList());
 
         this.level = new Level(levelNumber);
@@ -54,9 +60,19 @@ public class MainGamePanel {
         playerTowers.put(user, user.getTowers());
         playerTowers.put(comp, comp.getTowers());
 
+        selectedPlayerTowers = new HashMap();
+        selectedPlayerTowers.put(user, new LinkedList());
+        selectedPlayerTowers.put(comp, new LinkedList());
+
         playerTroops = new HashMap();
         playerTroops.put(user, user.getTroops());
         playerTroops.put(comp, comp.getTroops());
+    }
+
+    public void initPlayers() {
+        userPlayer.setGamePanel(this);
+        computerPlayer.setGamePanel(this);
+        nonePlayer.setGamePanel(this);
     }
 
     public Player getComputerPlayer() {
@@ -142,12 +158,36 @@ public class MainGamePanel {
         return playerTowers.get(owner);
     }
 
+    public HashMap< Player, List<Tower>> getSelectedPlayerTowers() {
+        return playerTowers;
+    }
+
+    public List<Tower> getSelectedPlayerTowers(Player owner) {
+        return selectedPlayerTowers.get(owner);
+    }
+
     public HashMap< Player, List<Troops>> getPlayerTroops() {
         return playerTroops;
     }
 
     public List<Troops> getPlayerTroops(Player owner) {
         return playerTroops.get(owner);
+    }
+
+    public void selectTower(Tower tower, Tower.Selection selectionType) {
+        if (selectionType == Tower.Selection.SELECTED) {
+            getSelectedPlayerTowers(tower.owner).add(tower);
+        }
+        else {
+            getSelectedPlayerTowers(tower.owner).remove(tower);
+        }
+        tower.select(selectionType);
+    }
+
+    public void sendTroops(Integer percentageShare, Player player, Tower destination) {
+        sendTroops(percentageShare, getSelectedPlayerTowers(player), destination);
+        getSelectedPlayerTowers(player).clear();
+        player.selectionMode = Player.SelectionMode.SELECT;
     }
 
     // wysyla wojska z wiez zrodlowych do wiezy docelowej
@@ -159,6 +199,7 @@ public class MainGamePanel {
             if (bubble != null) {
                 playerTroops.get(source.getOwner()).add(bubble);
             }
+            source.select(Tower.Selection.NONE);
             Log.d("wysylam troopsy", "poszly");
         }
     }
@@ -196,6 +237,9 @@ public class MainGamePanel {
     public void changeOwner(Tower tower, Player oldOwner, Player newOwner) {
         List<Tower> oldOwnerTowers = playerTowers.get(oldOwner);
         oldOwnerTowers.remove(tower);
+
+        List<Tower> oldOwnerSelectedTowers = selectedPlayerTowers.get(oldOwner);
+        oldOwnerSelectedTowers.remove(tower);
 
         List<Tower> newOwnerTowers = playerTowers.get(newOwner);
         newOwnerTowers.add(tower);

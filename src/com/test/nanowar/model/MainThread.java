@@ -14,7 +14,7 @@ import java.util.List;
 public class MainThread extends Thread {
 
     private boolean running;
-    protected MainGamePanel gamePanel;
+    final protected MainGamePanel gamePanel;
 
     public MainThread(MainGamePanel gamePanel) {
         super();

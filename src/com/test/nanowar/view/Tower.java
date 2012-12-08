@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -24,12 +25,11 @@ import com.test.nanowar.model.Player;
 public class Tower extends RelativeLayout {
     public static final int MIN_RADIUS_PERCENTAGE = 6;
     public static final int MAX_RADIUS_PERCENTAGE = 16;
-
     protected SVG innerResource, outerResource;
     protected int textColor;
     protected com.test.nanowar.model.Tower model;
-    protected ImageView outerBackground, innerBackground;
-    protected TextView count;
+    public ImageView outerBackground, innerBackground;
+    public TextView count;
     protected Point center;
     protected Rect position;
     protected MainLayout layout;
@@ -73,6 +73,7 @@ public class Tower extends RelativeLayout {
         buildOuterBackground();
         buildInnerBackground();
         buildCountElement();
+        setClickCallback();
     }
 
     protected void buildContainer() {
@@ -115,6 +116,26 @@ public class Tower extends RelativeLayout {
         this.addView(count, params);
     }
 
+    // ten event dotyczy tylko uzytkownika
+    protected void setClickCallback() {
+        setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                model.getGamePanel().getUserPlayer().selectTower(model);
+            }
+        });
+    }
+
+    public void select(com.test.nanowar.model.Tower.Selection selection) {
+        if (model.getOwner().isUser()) {
+            if (selection == com.test.nanowar.model.Tower.Selection.SELECTED) {
+                setBackgroundColor(Color.BLACK);
+            }
+            else {
+                setBackgroundColor(Color.TRANSPARENT);
+            }
+        }
+    }
+
     protected void setCenter(Point center) {
         this.center = center;
     }
@@ -155,13 +176,13 @@ public class Tower extends RelativeLayout {
 
     // w procentach
     public double computeExternalRadius() {
-        double ratio = Math.sqrt((double)model.getCapacity() / com.test.nanowar.model.Tower.MAX_CAPACITY);
+        double ratio = Math.sqrt((double) model.getCapacity() / com.test.nanowar.model.Tower.MAX_CAPACITY);
         return Math.max(ratio * Tower.MAX_RADIUS_PERCENTAGE, Tower.MIN_RADIUS_PERCENTAGE);
     }
 
     // w procentach
     public double computeInternalRadius() {
-        double ratio = Math.sqrt((double)model.getTroopsCount() / model.getCapacity());
+        double ratio = Math.sqrt((double) model.getTroopsCount() / model.getCapacity());
         return Math.min(Tower.MAX_RADIUS_PERCENTAGE, Math.max(ratio * computeExternalRadius(), Tower.MIN_RADIUS_PERCENTAGE));
     }
 
