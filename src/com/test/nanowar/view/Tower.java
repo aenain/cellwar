@@ -139,7 +139,7 @@ public class Tower extends RelativeLayout {
 
     // w procentach
     public double computeInternalRadius() {
-        return Math.min(Tower.MAX_RADIUS_PERCENTAGE, Math.max(Math.sqrt(model.getTroopsCount() / model.getCapacity()) * Tower.MAX_RADIUS_PERCENTAGE, Tower.MIN_RADIUS_PERCENTAGE));
+        return Math.min(Tower.MAX_RADIUS_PERCENTAGE, Math.max(Math.sqrt(model.getTroopsCount() / model.getCapacity()) * computeExternalRadius(), Tower.MIN_RADIUS_PERCENTAGE));
     }
 
     public void update() {

@@ -95,7 +95,6 @@ public class Tower {
     public void troopsArrived(Troops bubble) {
         if (owner == bubble.getOwner()) {
             troopsCount += bubble.count();
-            // TODO! a co jeśli przekroczy capacity?
         }
         else {
             troopsCount -= bubble.count();
