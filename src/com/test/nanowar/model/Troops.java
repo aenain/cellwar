@@ -51,13 +51,16 @@ public class Troops extends GameObject {
     }
     
     public void update() {
-        view.update();
+        view.post(new Runnable() {
+            public void run() {
+                view.update();
+            }
+        });
     }
     
     public boolean destinationReached() {
         if(destination != null) {
-            return true;
-            //return this.location.intersect(destination.getLocation());
+            return view.destinationReached();
         }
         else {
             // nie powinno sie wydarzyc, ale jakby co...

@@ -52,6 +52,10 @@ public class Tower {
         return capacity;
     }
 
+    public com.test.nanowar.view.Tower getView() {
+        return view;
+    }
+
     public void setCapacity(int capacity) {
         this.capacity = capacity;
     }
@@ -70,7 +74,12 @@ public class Tower {
         double deltaCountPerFrame = capacity / 200;
         internalTroopsCount += deltaCountPerFrame;
         troopsCount = (int)Math.floor(internalTroopsCount);
-        view.update();
+        
+        view.post(new Runnable() {
+            public void run() {
+                view.update();
+            }
+        });
     }
 
     /*

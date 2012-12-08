@@ -4,6 +4,7 @@
  */
 package com.test.nanowar.model;
 
+import android.graphics.Point;
 import static java.lang.Math.*;
 
 /**
@@ -22,6 +23,11 @@ public class RealPoint {
     public RealPoint(double x, double y) {
         this.x = x;
         this.y = y;
+    }
+    
+    public RealPoint(Point p) {
+        this.x = p.x;
+        this.y = p.y;
     }
 
     public double getX() {
@@ -49,9 +55,11 @@ public class RealPoint {
         return sqrt(x*x + y*y);
     }
     
-    public void normalise() {
+    public RealPoint normalise() {
         double len = getLength();
         x /= (LEN/len);
         y /= (LEN/len);
+        
+        return new RealPoint(x, y);
     }
 }

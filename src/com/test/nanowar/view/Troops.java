@@ -17,6 +17,7 @@ import com.larvalabs.svgandroid.SVGParser;
 import com.test.nanowar.MainLayout;
 import com.test.nanowar.R;
 import com.test.nanowar.model.Player;
+import com.test.nanowar.model.RealPoint;
 
 /**
  *
@@ -34,6 +35,8 @@ public class Troops extends RelativeLayout {
     protected com.test.nanowar.model.Troops model;
     
     protected Point center;
+    protected RealPoint realCenter;
+    protected RealPoint step;
     protected Rect position;
     protected MainLayout layout;
 
@@ -53,37 +56,28 @@ public class Troops extends RelativeLayout {
         //troops.init(layout);
 
         troops.setCenter(layout.convertToPx(model.getRelativeCenter()));
+        RealPoint realCenter = new RealPoint(troops.getCenter());
+        troops.setRealCenter(realCenter);
         troops.setPosition(troops.computePosition());
+        
+        Point dest = model.getDestination().getView().getCenter();
+        troops.setStep(new RealPoint(dest.x - realCenter.getX(), dest.y - realCenter.getY()).normalise());
         troops.buildView();
 
         return troops;
     }
-    
-    /*  old
-     * 
-     * public static Troops createForPlayer(com.test.nanowar.model.Troops model, Context context, RelativeLayout layout) {
-        Troops troops = new Troops(context);
-        troops.setModel(model);
-        //troops.init(layout);
-
-        troops.setOwner(model.getOwner());
-        troops.initAnimation();
-
-        return troops;
-    }*/
 
     public void setOwner(Player owner) {
-        if (owner != null) {
-            if (owner.isComputer()) {
-                setResource(R.raw.cellinnercomputer);
-                setTextColor(Color.WHITE);
-            } else {
-                setResource(R.raw.cellinneruser);
-                setTextColor(Color.WHITE);
-            }
-        } else {
-            setResource(R.raw.cellinnernone);
+        if (owner.isComputer()) {
+            setResource(R.raw.cellinnercomputer);
             setTextColor(Color.WHITE);
+        } else if(owner.isUser()) {
+            setResource(R.raw.cellinneruser);
+            setTextColor(Color.WHITE);
+        }
+        else {
+        setResource(R.raw.cellinnernone);
+        setTextColor(Color.WHITE);
         }
 
         background.setImageDrawable(resource.createPictureDrawable());
@@ -111,6 +105,22 @@ public class Troops extends RelativeLayout {
 
     public void setPosition(Rect position) {
         this.position = position;
+    }
+
+    public RealPoint getRealCenter() {
+        return realCenter;
+    }
+
+    public void setRealCenter(RealPoint realCenter) {
+        this.realCenter = realCenter;
+    }
+
+    public RealPoint getStep() {
+        return step;
+    }
+
+    public void setStep(RealPoint step) {
+        this.step = step;
     }
     
     protected void buildView() {
@@ -166,7 +176,23 @@ public class Troops extends RelativeLayout {
     }
     
     public void update() {
+        realCenter.add(step);
+        center.x = (int)Math.floor(realCenter.getX());
+        center.y = (int)Math.floor(realCenter.getY());
+        position = computePosition();
         
+        int actualRadius = layout.getRadius(computeRadius());
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(actualRadius, actualRadius);
+        params.alignWithParent = true;
+        params.leftMargin = center.x - actualRadius;
+        params.topMargin = center.y - actualRadius;
+        layout.updateViewLayout(this, params);
+        
+        
+    }
+    
+    public boolean destinationReached() {
+        return position.intersect(model.getDestination().getView().getPosition());
     }
 
     private Rect computePosition() {
