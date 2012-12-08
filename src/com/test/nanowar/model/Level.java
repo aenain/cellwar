@@ -61,7 +61,7 @@ public class Level {
             String ownerName;
             for (int i = 0; i < rawTowers.length(); i++) {
                 raw = rawTowers.getJSONObject(i);
-                tower = new com.test.nanowar.model.Tower();
+                tower = new com.test.nanowar.model.Tower(panel);
 
                 // relative location of the center point
                 coordinates = raw.getJSONArray("location");

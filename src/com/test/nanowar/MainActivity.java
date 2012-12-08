@@ -122,7 +122,7 @@ public class MainActivity extends Activity {
         int levelNumber = 1;
         MainGamePanel gamePanel = new MainGamePanel(layout, levelNumber);
         gamePanel.initLevel();
-        gamePanel.startGame();
+        // gamePanel.startGame();
     }
 
     @Override

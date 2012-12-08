@@ -13,7 +13,9 @@ import android.graphics.Rect;
  * klasa reprezentujaca wszystko, co zwiazane z duza komorka (nazwana wieza)
  * 
  */
-public class Tower extends GameObject {
+public class Tower {
+    public static final int MAX_CAPACITY = 100;
+
     // określa wielkosc wiezy (pojemnosc), w ktorej szybkosc powstawania jednostek jest
     // proporcjonalna do wielkosci.
     protected Integer capacity,
@@ -23,33 +25,23 @@ public class Tower extends GameObject {
     protected double internalTroopsCount;
 
     protected MainGamePanel panel;
-    protected Rect internalLocation;
+    protected Rect location;
     protected com.test.nanowar.view.Tower view;
 
     // in percentage of width and height of the screen
     protected Point relativeCenter;
+    protected Player owner;
 
-    public Tower() {
-        super(null, null);
-    }
-
-    public Tower(Player owner, Integer capacity, int initTroopsCount, Point center, MainGamePanel panel) {
-        super(owner, center);
-        this.capacity = capacity;
-        this.troopsCount = initTroopsCount;
-        this.internalTroopsCount = initTroopsCount;
+    public Tower(MainGamePanel panel) {
         this.panel = panel;
-        updateLocation(getRadius());
-
-        internalLocation = new Rect(center.y + getInternalRadius(), center.x - getInternalRadius(), center.x + getInternalRadius(), center.y + getInternalRadius());
-    }
-
-    public void createRectangle() {
-        // TODO!
     }
 
     public void addView(com.test.nanowar.view.Tower view) {
         this.view = view;
+    }
+
+    public Point getRelativeCenter() {
+        return relativeCenter;
     }
 
     public void setRelativeCenter(Point center) {
@@ -73,24 +65,12 @@ public class Tower extends GameObject {
         return troopsCount;
     }
 
-    // zwraca promien dla glownej czesci wiezy, ktora "rosnie"
-    public final Integer getInternalRadius() {
-        // int radius = Math.min(capacity, troopsCount);
-        // int radius = capacity;
-        return 40;
-    }
-
-    // zwraca promien dla tej fajnej otoczki wiezy :D
-    public final Integer getRadius() {
-        // int radius = capacity;
-        return 50;
-    }
-
     // w kazdej iteracji liczba jednostek rosnie
     public void update() {
         double deltaCountPerFrame = capacity / 200;
         internalTroopsCount += deltaCountPerFrame;
         troopsCount = (int)Math.floor(internalTroopsCount);
+        view.update();
     }
 
     /*
@@ -102,7 +82,7 @@ public class Tower extends GameObject {
         int count = (int)Math.floor(troopsCount * percentageShare / 100);
         
         if (count > 0) {
-            bubble = new Troops(owner, count, this.center);
+            bubble = new Troops(owner, count, this.relativeCenter);
             bubble.sendBetween(this, destination);
         }
 

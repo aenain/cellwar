@@ -4,13 +4,17 @@
  */
 package com.test.nanowar.view;
 
-import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Point;
+import android.graphics.Rect;
+import android.view.Gravity;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.larvalabs.svgandroid.SVG;
 import com.larvalabs.svgandroid.SVGParser;
+import com.test.nanowar.MainLayout;
 import com.test.nanowar.R;
 import com.test.nanowar.model.Player;
 
@@ -19,23 +23,97 @@ import com.test.nanowar.model.Player;
  * @author artur
  */
 public class Tower extends RelativeLayout {
+
+    public static final int MIN_RADIUS_PERCENTAGE = 8;
+    public static final int MAX_RADIUS_PERCENTAGE = 16;
     protected SVG innerResource, outerResource;
     protected int textColor;
     protected com.test.nanowar.model.Tower model;
-
     protected ImageView outerBackground, innerBackground;
     protected TextView count;
+    protected Point center;
+    protected Rect position;
+    protected MainLayout layout;
 
-    private Tower(Context context) {
-        super(context);
+    private Tower(MainLayout layout) {
+        super(layout.getContext());
+        this.layout = layout;
     }
 
-    public static Tower createForModel(com.test.nanowar.model.Tower model, Context context) {
-        Tower tower = new Tower(context);
+    public static Tower createForModel(com.test.nanowar.model.Tower model, MainLayout layout) {
+        Tower tower = new Tower(layout);
         tower.setOwner(model.getOwner());
         tower.setModel(model);
 
+        tower.setCenter(layout.convertToPx(model.getRelativeCenter()));
+        tower.setPosition(tower.computePosition());
+        tower.buildView();
+
         return tower;
+    }
+
+    protected Rect computePosition() {
+        int actualRadius = layout.getRadius(computeExternalRadius());
+        return new Rect(center.x - actualRadius, center.y - actualRadius, center.x + actualRadius, center.y + actualRadius);
+    }
+
+    protected void setPosition(Rect position) {
+        this.position = position;
+    }
+
+    protected Rect getPosition() {
+        return position;
+    }
+
+    protected void buildView() {
+        buildContainer();
+        buildOuterBackground();
+        buildInnerBackground();
+        buildCountElement();
+    }
+
+    protected void buildContainer() {
+        // tower container
+        int actualRadius = layout.getRadius(computeExternalRadius());
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(actualRadius, actualRadius);
+        params.alignWithParent = true;
+        params.leftMargin = center.x - actualRadius;
+        params.topMargin = center.y - actualRadius;
+        layout.addView(this, params);
+    }
+
+    protected void buildOuterBackground() {
+        outerBackground = new ImageView(layout.getContext());
+        outerBackground.setImageDrawable(outerResource.createPictureDrawable());
+
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+        this.addView(outerBackground, params);
+    }
+
+    protected void buildInnerBackground() {
+        int actualRadius = layout.getRadius(computeInternalRadius());
+        innerBackground = new ImageView(layout.getContext());
+        innerBackground.setImageDrawable(innerResource.createPictureDrawable());
+
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(actualRadius, actualRadius);
+        params.addRule(RelativeLayout.CENTER_IN_PARENT);
+        this.addView(innerBackground, params);
+    }
+
+    protected void buildCountElement() {
+        count = new TextView(layout.getContext());
+        count.setText(Integer.toString(model.getTroopsCount()) + " ");
+        count.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
+        count.setTextColor(textColor);
+        count.setTextSize(10);
+
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.CENTER_IN_PARENT);
+        this.addView(count, params);
+    }
+
+    protected void setCenter(Point center) {
+        this.center = center;
     }
 
     public void setOwner(Player owner) {
@@ -43,21 +121,29 @@ public class Tower extends RelativeLayout {
             setOuterResource(R.raw.celloutercomputer);
             setInnerResource(R.raw.cellinnercomputer);
             setTextColor(Color.WHITE);
-        }
-        else if (owner.isUser()) {
+        } else if (owner.isUser()) {
             setOuterResource(R.raw.cellouteruser);
             setInnerResource(R.raw.cellinneruser);
             setTextColor(Color.WHITE);
-        }
-        else {
+        } else {
             setOuterResource(R.raw.cellouternone);
             setInnerResource(R.raw.cellinnernone);
             setTextColor(Color.WHITE);
         }
     }
 
-    public void applyChanges() {
-        
+    // w procentach
+    public double computeExternalRadius() {
+        return Math.max(Math.sqrt(model.getCapacity() / com.test.nanowar.model.Tower.MAX_CAPACITY) * Tower.MAX_RADIUS_PERCENTAGE, Tower.MIN_RADIUS_PERCENTAGE);
+    }
+
+    // w procentach
+    public double computeInternalRadius() {
+        return Math.min(Tower.MAX_RADIUS_PERCENTAGE, Math.max(Math.sqrt(model.getTroopsCount() / model.getCapacity()) * Tower.MAX_RADIUS_PERCENTAGE, Tower.MIN_RADIUS_PERCENTAGE));
+    }
+
+    public void update() {
+        // TODO!
     }
 
     protected void setModel(com.test.nanowar.model.Tower model) {

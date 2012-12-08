@@ -18,7 +18,11 @@ public class MainLayout extends RelativeLayout {
         super(activity);
     }
 
-    public Point getPoint(int percentageX, int percentageY) {
+    public Point convertToPx(Point relativePoint) {
+        return getPoint(relativePoint.x, relativePoint.y);
+    }
+
+    public Point getPoint(double percentageX, double percentageY) {
         int x, y;
         DisplayMetrics metrics = getResources().getDisplayMetrics();
 
@@ -28,7 +32,7 @@ public class MainLayout extends RelativeLayout {
         return new Point(x, y);
     }
 
-    public int getRadius(int percentage) {
+    public int getRadius(double percentage) {
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         return (int)Math.round(Math.min(metrics.heightPixels, metrics.widthPixels) * percentage / 100);
     }

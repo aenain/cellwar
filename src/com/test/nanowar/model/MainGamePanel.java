@@ -96,7 +96,6 @@ public class MainGamePanel {
         updateTroops();
         updateTowers();
         handleCollisions();
-        updateTowersLists();
     }
 
     public void updateTroops() {
@@ -133,33 +132,6 @@ public class MainGamePanel {
                 }
             }
         }
-    }
-
-    public void updateTowersLists() {
-        HashMap<Player, List<Tower>> tempPlayTowers = new HashMap();
-        tempPlayTowers.put(userPlayer, new ArrayList());
-        tempPlayTowers.put(computerPlayer, new ArrayList());
-        tempPlayTowers.put(nonePlayer, new ArrayList());
-
-        Iterator< Entry< Player, List<Tower>>> iter;
-        for (iter = playerTowers.entrySet().iterator(); iter.hasNext();) {
-            Entry< Player, List<Tower>> entry = iter.next();
-
-            Iterator<Tower> listIter;
-            for (listIter = entry.getValue().iterator(); listIter.hasNext();) {
-                Tower tower = listIter.next();
-
-                if (tower.getOwner().isComputer()) {
-                    tempPlayTowers.get(computerPlayer).add(tower);
-                } else if (tower.getOwner().isUser()) {
-                    tempPlayTowers.get(userPlayer).add(tower);
-                } else if (tower.getOwner().isNone()) {
-                    tempPlayTowers.get(nonePlayer).add(tower);
-                }
-            }
-        }
-
-        playerTowers = tempPlayTowers;
     }
 
     public HashMap< Player, List<Tower>> getPlayerTowers() {
@@ -201,8 +173,7 @@ public class MainGamePanel {
         for (iter = playerTowers.entrySet().iterator(); iter.hasNext();) {
             Entry< Player, List<Tower>> entry = iter.next();
             for (Tower towerModel : entry.getValue()) {
-                com.test.nanowar.view.Tower towerView = com.test.nanowar.view.Tower.createForModel(towerModel, layout.getContext());
-                towerModel.createRectangle();
+                com.test.nanowar.view.Tower towerView = com.test.nanowar.view.Tower.createForModel(towerModel, layout);
                 towerModel.addView(towerView);
             }
         }
@@ -217,11 +188,6 @@ public class MainGamePanel {
     public void stopGame() {
         thread.setRunning(false);
         // TODO! zapis stanu gry
-    }
-
-    public Tower createTower(Player owner, Integer capacity, Integer initTroopsCount, Point center) {
-        Tower tower = new Tower(owner, capacity, initTroopsCount, center, this);
-        return tower;
     }
 
     public void changeOwner(Tower tower, Player oldOwner, Player newOwner) {
