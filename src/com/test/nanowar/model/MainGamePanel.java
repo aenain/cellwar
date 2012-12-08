@@ -192,7 +192,7 @@ public class MainGamePanel {
         level.setPanel(this);
         level.readData(layout.getContext());
 
-        buildViews();
+        // buildViews();
     }
 
     protected void buildViews() {

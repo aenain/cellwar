@@ -26,9 +26,11 @@ public class GameObject {
     }
 
     public GameObject(Player owner, Point center) {
-        this.owner = owner;
-        this.center = center;
-        location = new Rect(center.y + 1, center.x - 1, center.x + 1, center.y - 1);
+        if (owner != null && center != null) {
+            this.owner = owner;
+            this.center = center;
+            location = new Rect(center.y + 1, center.x - 1, center.x + 1, center.y - 1);
+        }
     }
 
     public Rect getLocation() {

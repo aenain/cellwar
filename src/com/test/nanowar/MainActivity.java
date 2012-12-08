@@ -119,7 +119,7 @@ public class MainActivity extends Activity {
         layout.addView(imageView, mainParams);
 
         // models
-        int levelNumber = 10;
+        int levelNumber = 1;
         MainGamePanel gamePanel = new MainGamePanel(layout, levelNumber);
         gamePanel.initLevel();
         gamePanel.startGame();

@@ -40,6 +40,7 @@ public class Level {
 
         JSONReader reader = new JSONReader(context);
         JSONObject data = reader.getLevelData(number);
+        if (data == null) { return; }
 
         try {
             // level name

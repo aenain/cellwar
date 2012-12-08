@@ -56,7 +56,11 @@ public class JSONReader {
     }
 
     protected String readLevelData(Integer levelNumber) {
-        Integer resourceId = ResourceResolver.raw("level" + levelNumber.toString(2));
+        StringBuilder levelFileName = new StringBuilder("level");
+        if (levelNumber < 10) { levelFileName.append("0"); }
+        levelFileName.append(levelNumber);
+
+        Integer resourceId = ResourceResolver.raw(levelFileName.toString());
         if (resourceId == null) { return ""; }
 
         InputStream stream = context.getResources().openRawResource(resourceId);
