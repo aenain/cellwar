@@ -4,6 +4,7 @@
  */
 package com.test.nanowar.model;
 
+import com.test.nanowar.utils.Mathematics;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,16 +13,17 @@ import java.util.List;
  * @author artur
  */
 public class Player {
+    public static final int MIN_SELECTION_DURATION = 200; // milliseconds
+    public static final int MAX_SELECTION_DURATION = 1200; // milliseconds
 
     public enum PlayerType {
-
         USER, COMPUTER, NONE
     }
 
     public enum SelectionMode {
-
         SELECT, TRANSPORT
     }
+
     protected PlayerType playerType;
     protected MainGamePanel gamePanel;
     protected SelectionMode selectionMode = SelectionMode.SELECT;
@@ -63,8 +65,8 @@ public class Player {
         return gamePanel.getPlayerTroops(this);
     }
 
-    public void selectTower(Tower tower) {
-        // synchronized (tower) {
+    public void selectTower(Tower tower, long touchDuration) {
+        synchronized (tower) {
             if (tower.getOwner().equals(this)) {
                 if (isSelecting()) {
                     if (tower.isSelected()) {
@@ -76,8 +78,8 @@ public class Player {
                 }
             }
 
-            gamePanel.sendTroops(50, this, tower);
-        // }
+            gamePanel.sendTroops(Player.convertSelectionTimeToPercentageShareOfTroops(touchDuration), this, tower);
+        }
     }
 
     public void sendTroops(List<Tower> selectedTowers, Tower destination, Integer percentageShare) {
@@ -102,5 +104,11 @@ public class Player {
 
     public boolean isSelecting() {
         return selectionMode == SelectionMode.SELECT;
+    }
+
+    public static int convertSelectionTimeToPercentageShareOfTroops(long selectionTimeInMilliseconds) {
+        int duration = Mathematics.inBounds((int)selectionTimeInMilliseconds, MIN_SELECTION_DURATION, MAX_SELECTION_DURATION);
+        int share = (int)Mathematics.linearConvertion(duration, MIN_SELECTION_DURATION, MAX_SELECTION_DURATION, Tower.MIN_TROOPS_SHARE, Tower.MAX_TROOPS_SHARE);
+        return Mathematics.inBounds(share, Tower.MIN_TROOPS_SHARE, Tower.MAX_TROOPS_SHARE);
     }
 }

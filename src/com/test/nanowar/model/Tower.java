@@ -21,6 +21,9 @@ public class Tower {
     }
 
     public static final int MAX_CAPACITY = 100;
+    public static final int MIN_TROOPS_SHARE = 50;
+    public static final int MAX_TROOPS_SHARE = 100;
+
     // określa wielkosc wiezy (pojemnosc), w ktorej szybkosc powstawania jednostek jest
     // proporcjonalna do wielkosci.
     protected Integer capacity;

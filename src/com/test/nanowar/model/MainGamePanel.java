@@ -18,7 +18,6 @@ import java.util.Map.Entry;
  * zarzadza gra
  */
 public class MainGamePanel {
-
     protected HashMap< Player, List<Tower>> playerTowers;
     protected HashMap< Player, List<Tower>> selectedPlayerTowers;
     protected HashMap< Player, List<Troops>> playerTroops;

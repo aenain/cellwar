@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -33,6 +34,7 @@ public class Tower extends RelativeLayout {
     protected Point center;
     protected Rect position;
     protected MainLayout layout;
+    protected long touchStartAt;
 
     private Tower(MainLayout layout) {
         super(layout.getContext());
@@ -122,9 +124,23 @@ public class Tower extends RelativeLayout {
 
     // ten event dotyczy tylko uzytkownika
     protected void setClickCallback() {
-        setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                model.getGamePanel().getUserPlayer().selectTower(model);
+        setClickable(false);
+        setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                int action = event.getAction();
+                switch(action) {
+                    case MotionEvent.ACTION_DOWN:
+                        touchStartAt = System.currentTimeMillis();
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        long selectionDuration = System.currentTimeMillis() - touchStartAt;
+                        model.getGamePanel().getUserPlayer().selectTower(model, selectionDuration);
+                        break;
+                }
+
+                return true;
             }
         });
     }
