@@ -56,11 +56,11 @@ public class Level {
         JSONReader reader = new JSONReader(context);
         JSONObject userData = reader.getUserLevelData(number);
         if (userData != null) {
-            Log.d("LEVEL", "readUserData:" + data.toString());
+            Log.d("LEVEL", "readUserData:" + userData.toString());
             try {
                 bestTime = userData.getInt("time");
-                bestScore = userData.getInt("score");
-                levelName = data.optString("name", "NO NAME");
+                bestScore = userData.optInt("score", 0);
+                levelName = userData.optString("name", "NO NAME");
             } catch (JSONException ex) {
                 Log.e("Level", "reading user data error", ex);
             }

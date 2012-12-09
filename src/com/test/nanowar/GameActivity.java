@@ -147,7 +147,7 @@ public class GameActivity extends Activity {
             button = (Button) dialog.findViewById(R.id.main_menu_button);
             button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    self.retryCurrentLevel(v);
+                    self.openMainMenu(v);
                 }
             });
         }

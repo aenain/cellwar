@@ -30,7 +30,7 @@ public class LvlChooserActivity extends ListActivity {
         ListView listView = (ListView) findViewById(android.R.id.list);
 
         Level level;
-        Level[] levels = new Level[1];
+        Level[] levels = new Level[Level.COUNT];
         for (int i = 0; i < levels.length; i++) {
             level = new Level(i + 1);
             level.readUserData(this);

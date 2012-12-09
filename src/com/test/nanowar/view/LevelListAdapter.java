@@ -6,6 +6,7 @@ package com.test.nanowar.view;
 
 import com.test.nanowar.R;
 import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,14 +44,18 @@ public class LevelListAdapter extends ArrayAdapter<Level> {
             rowView = inflater.inflate(R.layout.level, null);
             holder = new ViewHolder();
             holder.name = (TextView) rowView.findViewById(R.id.level_name);
+            Log.d("ADAPTER", "holder.name:" + holder.name);
             // holder.thumbnail = (ImageView) rowView.findViewById(R.id.level_thumbnail);
             rowView.setTag(holder);
         }
         else {
             holder = (ViewHolder) rowView.getTag();
+            Log.d("ADAPTER", "holder.name:" + holder.name);
         }
 
         Level level = levels[position];
+        Log.d("ADAPTER", "level" + level);
+        Log.d("ADAPTER", "levelName" + level.getLevelName());
         holder.name.setText(level.getLevelName());
 
         return rowView;
