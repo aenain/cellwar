@@ -23,10 +23,9 @@ public class Tower {
     public static final int MAX_CAPACITY = 100;
     // określa wielkosc wiezy (pojemnosc), w ktorej szybkosc powstawania jednostek jest
     // proporcjonalna do wielkosci.
-    protected Integer capacity,
-            // okresla aktualna ilosc wojsk w wiezy, nie moze przekroczyc _capacity_
-            troopsCount;
-    protected double internalTroopsCount;
+    protected Integer capacity;
+    // okresla aktualna ilosc wojsk w wiezy, nie moze przekroczyc _capacity_
+    protected Double troopsCount;
     protected MainGamePanel panel;
     protected Rect location;
     protected com.test.nanowar.view.Tower view;
@@ -69,20 +68,20 @@ public class Tower {
     }
 
     public void setInitTroopsCount(int count) {
-        this.troopsCount = count;
-        this.internalTroopsCount = count;
+        this.troopsCount = (double)count;
     }
 
-    public Integer getTroopsCount() {
+    public Double getTroopsCount() {
         return troopsCount;
     }
 
     // w kazdej iteracji liczba jednostek rosnie
     public void update() {
-        if(troopsCount < capacity) {
-            double deltaCountPerFrame = (double)capacity / 2000;
-            internalTroopsCount += deltaCountPerFrame;
-            troopsCount = (int)Math.floor(internalTroopsCount);
+        synchronized(troopsCount) {
+            if(troopsCount < capacity) {
+                double deltaCountPerFrame = (double)capacity / 2000;
+                troopsCount += deltaCountPerFrame;
+            }
         }
 
         view.post(new Runnable() {
@@ -101,6 +100,9 @@ public class Tower {
         int count = (int) Math.floor(troopsCount * percentageShare / 100);
 
         if (count > 0) {
+            synchronized(troopsCount) {
+                troopsCount -= count;
+            }
             bubble = new Troops(owner, count, this.relativeCenter);
             bubble.sendBetween(this, destination);
         }
@@ -113,14 +115,16 @@ public class Tower {
      * metoda wywolywana, gdy jednostki (bubble) dotarly do wiezy
      */
     public void troopsArrived(Troops bubble) {
-        if (owner == bubble.getOwner()) {
-            troopsCount += bubble.count();
-        } else {
-            troopsCount -= bubble.count();
-            // jesli bylo wiecej jednostek wroga, to nastepuje przejecie wiezy
-            if (troopsCount < 0) {
-                troopsCount = -troopsCount;
-                changeOwner(bubble.getOwner());
+        synchronized(troopsCount) {
+            if (owner == bubble.getOwner()) {
+                troopsCount += bubble.count();
+            } else {
+                troopsCount -= bubble.count();
+                // jesli bylo wiecej jednostek wroga, to nastepuje przejecie wiezy
+                if (troopsCount < 0) {
+                    troopsCount *= -1;
+                    changeOwner(bubble.getOwner());
+                }
             }
         }
 

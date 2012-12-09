@@ -27,8 +27,8 @@ import com.test.nanowar.model.RealPoint;
  */
 public class Troops extends RelativeLayout {
     
-    public static final int MIN_RADIUS_PERCENTAGE = 3;
-    public static final int MAX_RADIUS_PERCENTAGE = 8;
+    public static final int MIN_RADIUS_PERCENTAGE = 5;
+    public static final int MAX_RADIUS_PERCENTAGE = 9;
 
     protected SVG resource;
     protected ImageView background;
@@ -161,9 +161,9 @@ public class Troops extends RelativeLayout {
         count.setText(Integer.toString(model.count()) + " ");
         count.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
         count.setTextColor(textColor);
-        count.setTextSize(10);
+        count.setTextSize(8);
 
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.CENTER_IN_PARENT);
         
         this.addView(count, params);

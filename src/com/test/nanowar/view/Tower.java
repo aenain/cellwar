@@ -106,7 +106,11 @@ public class Tower extends RelativeLayout {
 
     protected void buildCountElement() {
         count = new TextView(layout.getContext());
-        count.setText(Integer.toString(model.getTroopsCount()) + " ");
+        synchronized(model.getTroopsCount()) {
+            int troopsCount = (int)Math.floor(model.getTroopsCount());
+            count.setText(Integer.toString(troopsCount) + " ");
+        }
+
         count.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
         count.setTextColor(textColor);
         count.setTextSize(10);
@@ -192,7 +196,10 @@ public class Tower extends RelativeLayout {
         params.addRule(RelativeLayout.CENTER_IN_PARENT);
         innerBackground.setLayoutParams(params);
 
-        count.setText(model.getTroopsCount().toString());
+        synchronized(model.getTroopsCount()) {
+            int troopsCount = (int) Math.floor(model.getTroopsCount());
+            count.setText(Integer.toString(troopsCount));
+        }
     }
 
     protected void setModel(com.test.nanowar.model.Tower model) {
