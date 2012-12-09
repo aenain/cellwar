@@ -262,7 +262,7 @@ public class MainGamePanel {
             playSound(R.raw.alarm);
         }
         else if(newOwner.isUser()) {
-            
+            playSound(R.raw.fanfare);
         }
         
         List<Tower> oldOwnerTowers = playerTowers.get(oldOwner);
