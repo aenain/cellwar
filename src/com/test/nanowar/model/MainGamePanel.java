@@ -4,10 +4,17 @@
  */
 package com.test.nanowar.model;
 
+import android.content.Context;
+import android.media.AudioManager;
 import android.util.Log;
 import com.test.nanowar.MainLayout;
 import java.util.*;
 import java.util.Map.Entry;
+
+import android.app.Activity;
+import android.media.AudioManager;
+import android.media.SoundPool;
+import android.media.SoundPool.OnLoadCompleteListener;
 
 /**
  *
@@ -249,4 +256,5 @@ public class MainGamePanel {
             // TODO! koniec gry
         }
     }
+   
 }
