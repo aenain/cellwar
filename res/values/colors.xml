@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="background">#10abe2</color>
+    <color name="title">#ffffff</color>
+    <color name="text">#ffffff</color>
+    <color name="menu_button_text">#ffffff</color>
+    <color name="menu_button_background">#cccccc</color>
+    <color name="header_text">#dddddd</color>
+    <color name="empty_level_preview">#aaaaaa</color>
+    <color name="levels_row_background">#ccffffff</color>
+    <color name="levels_row_name">#000000</color>
+    <color name="levels_divider">#10abe2</color>
+    <color name="transparent">#00000000</color>
+</resources>

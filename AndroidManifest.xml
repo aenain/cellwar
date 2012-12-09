@@ -6,11 +6,33 @@
     <application android:label="@string/app_name" android:icon="@drawable/ic_launcher">
         <activity android:name="MainActivity"
                   android:label="@string/app_name"
-                  android:configChanges="orientation|screenSize">
+                  android:configChanges="orientation|screenSize"
+                  android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+        >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name="TutorialActivity"
+                  android:label="tutorial"
+                  android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+        >
+        </activity>
+        <activity android:name="CreditsActivity"
+                  android:label="credits"
+                  android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+        >
+        </activity>
+        <activity android:name="LvlChooserActivity"
+                  android:label="levels"
+                  android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+        >
+        </activity>
+        <activity android:name="GameActivity"
+                  android:label="game"
+                  android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+        >
         </activity>
     </application>
 </manifest>

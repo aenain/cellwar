@@ -205,7 +205,7 @@ public class MainGamePanel {
 
     public void initLevel() {
         level.setPanel(this);
-        level.readData(layout.getContext());
+        level.readDataAndInitTowers(layout.getContext());
 
         buildViews();
     }

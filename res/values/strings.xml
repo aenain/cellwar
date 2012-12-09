@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">MainActivity</string>
+    <string name="app_name">cellwar</string>
     <string name="choose_selection">Selection</string>
     <string name="choose_transport">Transport</string>
+    <string name="open_level_chooser">Play</string>
+    <string name="open_tutorial">Tutorial</string>
+    <string name="open_credits">Credits</string>
+    <string name="tutorial">Here will be a text of the tutorial. Maybe some day :D</string>
+    <string name="credits_header_description">What is it?</string>
+    <string name="credits_description">This application has been developed as a miniproject for course named Simulations. Our task was to do a reverse engineering of a game called Nanowar.</string>
+    <string name="credits_header_authors">Authors</string>
+    <string name="credits_authors">Artur Hebda &amp; Kamil Wajda - students of the AGH University of Science and Technology in Cracow, Poland</string>
+    <string name="levels_header">Choose Level</string>
+    <string name="level_name">No name</string>
 </resources>

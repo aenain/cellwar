@@ -148,7 +148,7 @@ public class Tower extends RelativeLayout {
     public void select(com.test.nanowar.model.Tower.Selection selection) {
         if (model.getOwner().isUser()) {
             if (selection == com.test.nanowar.model.Tower.Selection.SELECTED) {
-                setBackgroundColor(Color.BLACK);
+                setBackgroundColor(Color.argb(50, 0, 0, 0));
             }
             else {
                 setBackgroundColor(Color.TRANSPARENT);

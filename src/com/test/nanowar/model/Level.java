@@ -14,17 +14,20 @@ import org.json.JSONObject;
 
 /**
  *
- * @author artur
- * klasa reprezentujaca dany poziom: zawiera informacje o wymaganiach czasowych na kolejne
- * gwiazdki, bestScore (ile gwiazdek), nazwa lvl-u, thumbnail
- * odpowiada za wczytanie informacji o levelu zapisanych w json-ie do panelu.
+ * @author artur klasa reprezentujaca dany poziom: zawiera informacje o
+ * wymaganiach czasowych na kolejne gwiazdki, bestScore (ile gwiazdek), nazwa
+ * lvl-u, thumbnail odpowiada za wczytanie informacji o levelu zapisanych w
+ * json-ie do panelu.
  */
 public class Level {
+    public static final int COUNT = 3;
+
     protected String levelName;
     protected int number;
     protected int bestScore, bestTime;
     protected int timeRequirements[] = new int[3];
     protected MainGamePanel panel;
+    protected JSONObject data;
 
     public Level(int number) {
         this.number = number;
@@ -34,24 +37,30 @@ public class Level {
         this.panel = panel;
     }
 
-    // wczytuje dane z jsona i inicjalizuje wszystkie pola (poza bestScore i bestTime)
     public void readData(Context context) {
-        if (panel == null) { return; }
-
         JSONReader reader = new JSONReader(context);
-        JSONObject data = reader.getLevelData(number);
-        if (data == null) { return; }
+        data = reader.getLevelData(number);
+        if (data != null) {
+            try {
+                // level name
+                setLevelName(data.getString("name"));
 
-        try {
-            // level name
-            setLevelName(data.getString("name"));
-            
-            // time requirements
-            JSONArray rawRequirements = data.getJSONArray("timeRequirements");
-            for (int i = 0; i < timeRequirements.length; i++) {
-                timeRequirements[i] = rawRequirements.optInt(i, 0);
+                // time requirements
+                JSONArray rawRequirements = data.getJSONArray("timeRequirements");
+                for (int i = 0; i < timeRequirements.length; i++) {
+                    timeRequirements[i] = rawRequirements.optInt(i, 0);
+                }
+            } catch (JSONException ex) {
+                Log.e("Level", "reading level data error", ex);
             }
+        }
+    }
 
+    // wczytuje dane z jsona i inicjalizuje wszystkie pola (poza bestScore i bestTime)
+    public void readDataAndInitTowers(Context context) {
+        readData(context);
+        if (panel == null || data == null) { return; }
+        try {
             // towers
             JSONArray rawTowers = data.getJSONArray("towers");
             JSONObject raw;
@@ -78,17 +87,15 @@ public class Level {
                 if (ownerName.equals("user")) {
                     tower.setOwner(panel.userPlayer);
                     panel.getPlayerTowers(panel.userPlayer).add(tower);
-                }
-                else if (ownerName.equals("computer")) {
+                } else if (ownerName.equals("computer")) {
                     tower.setOwner(panel.computerPlayer);
                     panel.getPlayerTowers(panel.computerPlayer).add(tower);
-                }
-                else {
+                } else {
                     tower.setOwner(panel.nonePlayer);
                     panel.getPlayerTowers(panel.nonePlayer).add(tower);
                 }
             }
-        } catch(JSONException ex) {
+        } catch (JSONException ex) {
             Log.e("Level", "reading level data error", ex);
         }
     }

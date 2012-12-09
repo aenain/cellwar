@@ -77,6 +77,6 @@
             "capacity": 50,
             "initTroopsCount": 20,
             "player": "none"
-        },
+        }
     ]
 }
