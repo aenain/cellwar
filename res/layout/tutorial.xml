@@ -12,6 +12,43 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
     android:textColor="@color/text"
-    android:text="@string/tutorial"
+    android:text="@string/tutorial_1"
+    android:paddingTop="10sp"
+    />
+<TextView
+    android:id="@+id/tutorial"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:textColor="@color/text"
+    android:text="@string/tutorial_2"
+    android:paddingTop="10sp"
+    />
+<TextView
+    android:id="@+id/tutorial"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:textColor="@color/text"
+    android:text="@string/tutorial_3"
+    android:paddingTop="10sp"
+    />
+<TextView
+    android:id="@+id/tutorial"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:textColor="@color/text"
+    android:text="@string/tutorial_4"
+    android:paddingTop="10sp"
+    />
+<TextView
+    android:id="@+id/tutorial"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:textColor="@color/text"
+    android:text="@string/tutorial_5"
+    android:paddingTop="10sp"
     />
 </LinearLayout>

@@ -14,19 +14,24 @@
     />
     
     <Button
-        android:layout_marginBottom = "5sp"
-        android:layout_marginLeft = "10sp"
-        android:layout_marginRight = "10sp"
+        android:id="@+id/retry_button"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_marginBottom="5sp"
+        android:layout_marginLeft="10sp"
+        android:layout_marginRight="10sp"
         android:gravity="center_horizontal"
         android:padding="3sp"
         android:text="@string/retry_level_button"
         android:textSize="20sp"
         android:textColor="@color/menu_button_text"
         android:background="@drawable/menu_button"
-        android:onClick="retryCurrentLevel"
         />
 
     <Button
+        android:id="@+id/main_menu_button"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_marginBottom = "5sp"
         android:layout_marginLeft = "10sp"
         android:layout_marginRight = "10sp"
@@ -36,6 +41,5 @@
         android:textSize="20sp"
         android:textColor="@color/menu_button_text"
         android:background="@drawable/menu_button"
-        android:onClick="openMainMenu"
         />
 </LinearLayout>

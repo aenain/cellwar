@@ -27,7 +27,7 @@ public class JSONWriter {
     }
 
     public void writeUserLevelData(Integer levelNumber, JSONObject json) {
-        writeInternalFile(json, ResourceResolver.levelFileName(levelNumber));
+        writeInternalFile(json, ResourceResolver.levelFileName(levelNumber) +".json");
     }
 
     protected void writeInternalFile(JSONObject json, String filename) {

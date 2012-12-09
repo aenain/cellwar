@@ -245,14 +245,21 @@ public class MainGamePanel {
     public void stopGame() {
         thread.setRunning(false);
         if (winner != null) {
-            GameActivity activity = (GameActivity)layout.getContext();
-            level.setTimeAndScore(thread.getTime());
-            
+            final GameActivity activity = (GameActivity)layout.getContext();
+
             if (userPlayer.equals(winner)) {
+                level.setTimeAndScore(thread.getTime());
                 level.saveResults(activity);
+            } else {
+                level.setScore(0);
             }
 
-            activity.onGameFinished();
+            layout.post(new Runnable() {
+                public void run() {
+                    activity.onGameFinished();
+                }
+            });
+            
         }
     }
 

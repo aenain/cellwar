@@ -6,7 +6,12 @@
     <string name="open_level_chooser">Play</string>
     <string name="open_tutorial">Tutorial</string>
     <string name="open_credits">Credits</string>
-    <string name="tutorial">Here will be a text of the tutorial. Maybe some day :D</string>
+    <string name="tutorial_1">Welcome to the Cellwar game tutorial.</string>
+    <string name="tutorial_2">On the game screen there are 3 types of cells: yours (yellow), computer\'s (red) 
+and nobody\'s (gray).</string>
+    <string name="tutorial_3">Number on each cell means counter of troops inside that cell. Each cell produces troops until their number will reach max possible value. Bigger cells can produce more troops and make them faster than smaller cell.</string>
+    <string name="tutorial_4">You can click on your cell to select it or deselect. Then you click \'Transport\' on the screen and afterwards you can click and hold to transport troops to another cell. You will take over computer or nobody cell if the number of sent troops is greater than the number of troops inside cell.</string>
+    <string name="tutorial_5">You aim is to take over all computer\'s cells.</string>
     <string name="credits_header_description">What is it?</string>
     <string name="credits_description">This application has been developed as a miniproject for course named Simulations. Our task was to do a reverse engineering of a game called Nanowar.</string>
     <string name="credits_header_authors">Authors</string>

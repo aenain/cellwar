@@ -65,7 +65,7 @@ public class JSONReader {
     }
 
     public JSONObject getUserLevelData(Integer levelNumber) {
-        readInternalFile(ResourceResolver.levelFileName(levelNumber));
+        readInternalFile(ResourceResolver.levelFileName(levelNumber) + ".json");
 
         try {
             return new JSONObject(rawJSON);

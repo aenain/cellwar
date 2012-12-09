@@ -56,23 +56,29 @@ public class Level {
         JSONReader reader = new JSONReader(context);
         JSONObject userData = reader.getUserLevelData(number);
         if (userData != null) {
+            Log.d("LEVEL", "readUserData:" + data.toString());
             try {
                 bestTime = userData.getInt("time");
                 bestScore = userData.getInt("score");
-                levelName = data.getString("name");
+                levelName = data.optString("name", "NO NAME");
             } catch (JSONException ex) {
                 Log.e("Level", "reading user data error", ex);
             }
+        }
+        else {
+            Log.d("LEVEL", "readUserData:null");
         }
     }
 
     public void readData(Context context) {
         JSONReader reader = new JSONReader(context);
         data = reader.getLevelData(number);
+
         if (data != null) {
+            Log.d("LEVEL", "readData:" + data.toString());
             try {
                 // level name
-                levelName = data.getString("name");
+                levelName = data.optString("name", "NO NAME");
 
                 // time requirements
                 JSONArray rawRequirements = data.getJSONArray("timeRequirements");
@@ -82,6 +88,9 @@ public class Level {
             } catch (JSONException ex) {
                 Log.e("Level", "reading level data error", ex);
             }
+        }
+        else {
+            Log.d("LEVEL", "readData:null");
         }
     }
 
@@ -128,6 +137,10 @@ public class Level {
         } catch (JSONException ex) {
             Log.e("Level", "reading level data error", ex);
         }
+    }
+
+    public void setScore(int score) {
+        this.currentScore = score;
     }
 
     public int getScore() {

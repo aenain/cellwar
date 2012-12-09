@@ -108,20 +108,48 @@ public class GameActivity extends Activity {
     // gra sie zakonczyla, bo ktorys gracz wygral
     public void onGameFinished() {
         final Dialog dialog = new Dialog(this);
+        final GameActivity self = this;
+
         if (gamePanel.getUserPlayer().equals(gamePanel.getWinner())) {
             dialog.setContentView(R.layout.victory);
             dialog.setTitle("Victory!");
             ImageView score = (ImageView) dialog.findViewById(R.id.score_image_victory);
-            Integer resourceId = ResourceResolver.raw("stars" + Integer.toString(gamePanel.getLevel().getScore()));
+            Integer resourceId = ResourceResolver.raw("score" + Integer.toString(gamePanel.getLevel().getScore()));
             SVG stars = SVGParser.getSVGFromResource(getResources(), resourceId);
             score.setImageDrawable(stars.createPictureDrawable());
+            Button button;
+            button = (Button) dialog.findViewById(R.id.next_level_button);
+            button.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    self.openNextLevel(v);
+                }
+            });
+            button = (Button) dialog.findViewById(R.id.main_menu_button);
+            button.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    self.openMainMenu(v);
+                }
+            });
         } else {
             dialog.setContentView(R.layout.defeat);
             dialog.setTitle("Defeat...");
             ImageView score = (ImageView) dialog.findViewById(R.id.score_image_defeat);
-            Integer resourceId = ResourceResolver.raw("stars" + Integer.toString(gamePanel.getLevel().getScore()));
+            Integer resourceId = ResourceResolver.raw("score" + Integer.toString(gamePanel.getLevel().getScore()));
             SVG stars = SVGParser.getSVGFromResource(getResources(), resourceId);
             score.setImageDrawable(stars.createPictureDrawable());
+            Button button;
+            button = (Button) dialog.findViewById(R.id.retry_button);
+            button.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    self.retryCurrentLevel(v);
+                }
+            });
+            button = (Button) dialog.findViewById(R.id.main_menu_button);
+            button.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    self.retryCurrentLevel(v);
+                }
+            });
         }
 
         dialog.show();
