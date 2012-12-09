@@ -205,13 +205,15 @@ public class Troops extends RelativeLayout {
     
     public void remove() {
         final Troops temp = this;
-        if(temp != null)
-        ((ViewGroup)this.getParent()).post(new Runnable() {
-            public void run() {
-                if(temp != null)
-                    ((ViewGroup)temp.getParent()).removeView(temp);
-            }
-        });
+        if(temp != null) {
+            layout.post(new Runnable() {
+                public void run() {
+                    if (temp != null) {
+                        layout.removeView(temp);
+                    }
+                }
+            });
+        }
     }
     
     public boolean destinationReached() {

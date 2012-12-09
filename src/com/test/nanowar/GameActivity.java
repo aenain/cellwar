@@ -141,12 +141,14 @@ public class GameActivity extends Activity {
             button = (Button) dialog.findViewById(R.id.retry_button);
             button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
+                    dialog.dismiss();
                     self.retryCurrentLevel(v);
                 }
             });
             button = (Button) dialog.findViewById(R.id.main_menu_button);
             button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
+                    dialog.dismiss();
                     self.openMainMenu(v);
                 }
             });
@@ -160,7 +162,7 @@ public class GameActivity extends Activity {
         Intent intent = new Intent(GameActivity.this, GameActivity.class);
         intent.putExtra("level", currentLevelNumber);
         startActivity(intent);
-        finish();
+        // finish();
     }
 
     public void openNextLevel(View view) {
@@ -175,13 +177,13 @@ public class GameActivity extends Activity {
         }
 
         startActivity(intent);
-        finish();
+        // finish();
     }
 
     public void openMainMenu(View view) {
         Intent intent = new Intent(GameActivity.this, MainActivity.class);
         startActivity(intent);
-        finish();
+        // finish();
     }
 
     @Override
