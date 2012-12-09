@@ -21,7 +21,7 @@ import org.json.JSONObject;
  * json-ie do panelu.
  */
 public class Level {
-    public static final int COUNT = 3;
+    public static final int COUNT = 5;
 
     protected String levelName;
     protected int number;
@@ -46,7 +46,8 @@ public class Level {
             userData.put("time", bestTime);
             userData.put("score", bestScore);
             userData.put("name", levelName);
-            writer.writeUserLevelData(number, data);
+            writer.writeUserLevelData(number, userData);
+            Log.d("LEVEL", "writing user data:" + userData);
         } catch (JSONException ex) {
             Log.e("Level", "writing user data error", ex);
         }

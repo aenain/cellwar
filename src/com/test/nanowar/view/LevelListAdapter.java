@@ -13,19 +13,24 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.larvalabs.svgandroid.SVG;
+import com.larvalabs.svgandroid.SVGParser;
 import com.test.nanowar.model.Level;
+import com.test.nanowar.utils.ResourceResolver;
 
 /**
  *
  * @author artur
  */
 public class LevelListAdapter extends ArrayAdapter<Level> {
+
     private final Activity context;
     private final Level[] levels;
 
     static class ViewHolder {
+
         public TextView name;
-        public ImageView thumbnail;
+        public ImageView thumbnail, score;
     }
 
     public LevelListAdapter(Activity context, Level[] levels) {
@@ -46,9 +51,9 @@ public class LevelListAdapter extends ArrayAdapter<Level> {
             holder.name = (TextView) rowView.findViewById(R.id.level_name);
             Log.d("ADAPTER", "holder.name:" + holder.name);
             // holder.thumbnail = (ImageView) rowView.findViewById(R.id.level_thumbnail);
+            holder.score = (ImageView) rowView.findViewById(R.id.level_score);
             rowView.setTag(holder);
-        }
-        else {
+        } else {
             holder = (ViewHolder) rowView.getTag();
             Log.d("ADAPTER", "holder.name:" + holder.name);
         }
@@ -57,6 +62,9 @@ public class LevelListAdapter extends ArrayAdapter<Level> {
         Log.d("ADAPTER", "level" + level);
         Log.d("ADAPTER", "levelName" + level.getLevelName());
         holder.name.setText(level.getLevelName());
+        Integer resourceId = ResourceResolver.raw("score" + Integer.toString(level.getBestScore()));
+        SVG stars = SVGParser.getSVGFromResource(context.getResources(), resourceId);
+        holder.score.setImageDrawable(stars.createPictureDrawable());
 
         return rowView;
     }

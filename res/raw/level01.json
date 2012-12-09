@@ -1,9 +1,9 @@
 {
     "name": "Level 1",
     "timeRequirements": [
-        90,
-        60,
-        30
+        400,
+        200,
+        100
     ],
     "towers": [
         {
@@ -28,7 +28,7 @@
             "location": [20, 35],
             "capacity": 100,
             "initTroopsCount": 10,
-            "player": "computer"
+            "player": "none"
         },
         {
             "location": [75, 75],
