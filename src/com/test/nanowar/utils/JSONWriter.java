@@ -18,15 +18,19 @@ import org.json.JSONObject;
  */
 public class JSONWriter {
     protected File directory;
-    protected String filename, rawJSON;
+    protected Context context;
 
-    public JSONWriter(Context context, String filename) {
-        this.filename = filename;
+    public JSONWriter(Context context) {
         ContextWrapper wrapper = new ContextWrapper(context);
         directory = wrapper.getDir("media", Context.MODE_PRIVATE);
+        this.context = context;
     }
 
-    public void write(JSONObject json) {
+    public void writeUserLevelData(Integer levelNumber, JSONObject json) {
+        writeInternalFile(json, ResourceResolver.levelFileName(levelNumber));
+    }
+
+    protected void writeInternalFile(JSONObject json, String filename) {
         FileWriter fwriter = null;
         
         try {

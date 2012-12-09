@@ -56,16 +56,23 @@ public class JSONReader {
     }
 
     protected String readLevelData(Integer levelNumber) {
-        StringBuilder levelFileName = new StringBuilder("level");
-        if (levelNumber < 10) { levelFileName.append("0"); }
-        levelFileName.append(levelNumber);
-
-        Integer resourceId = ResourceResolver.raw(levelFileName.toString());
+        Integer resourceId = ResourceResolver.raw(ResourceResolver.levelFileName(levelNumber));
         if (resourceId == null) { return ""; }
 
         InputStream stream = context.getResources().openRawResource(resourceId);
         java.util.Scanner scanner = new java.util.Scanner(stream, "UTF-8").useDelimiter("\\A");
         return scanner.hasNext() ? scanner.next() : "";
+    }
+
+    public JSONObject getUserLevelData(Integer levelNumber) {
+        readInternalFile(ResourceResolver.levelFileName(levelNumber));
+
+        try {
+            return new JSONObject(rawJSON);
+        } catch (JSONException ex) {
+            Log.e("JSONReader", "json parsing error", ex);
+            return null;
+        }
     }
 
     protected void readInternalFile(String filename) {

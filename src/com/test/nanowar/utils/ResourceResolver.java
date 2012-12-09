@@ -28,4 +28,11 @@ public class ResourceResolver {
 
         return levelResourceId;
     }
+
+    public static String levelFileName(Integer number) {
+        StringBuilder levelFileName = new StringBuilder("level");
+        if (number < 10) { levelFileName.append("0"); }
+        levelFileName.append(number);
+        return levelFileName.toString();
+    }
 }
