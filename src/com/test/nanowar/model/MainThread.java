@@ -46,7 +46,7 @@ public class MainThread extends Thread {
             }
             ile++;*/
              try {
-               sleep(20);
+               sleep(40);
            } catch (InterruptedException ex) {}
         }
     }

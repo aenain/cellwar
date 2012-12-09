@@ -64,8 +64,6 @@ public class Troops extends RelativeLayout {
         Point dest = model.getDestination().getView().getCenter();
         troops.setStep(new RealPoint(dest.x - realCenter.getX(), dest.y - realCenter.getY()).normalise());
         troops.buildView();
-        
-        Log.d("kolejny count", model.count().toString());
 
         return troops;
     }
@@ -168,7 +166,6 @@ public class Troops extends RelativeLayout {
         
         this.addView(count, params);
         
-        Log.d("tutajTezLicze", Integer.toString(model.count()));
     }
 
     /*protected void init(Context context, MainLayout layout) {
@@ -208,9 +205,11 @@ public class Troops extends RelativeLayout {
     
     public void remove() {
         final Troops temp = this;
+        if(temp != null)
         ((ViewGroup)this.getParent()).post(new Runnable() {
             public void run() {
-                ((ViewGroup)temp.getParent()).removeView(temp);
+                if(temp != null)
+                    ((ViewGroup)temp.getParent()).removeView(temp);
             }
         });
     }

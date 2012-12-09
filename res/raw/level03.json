@@ -1,0 +1,82 @@
+{
+    "name": "You can do it!",
+    "timeRequirements": [
+        90,
+        60,
+        30
+    ],
+    "towers": [
+        {
+            "location": [20, 20],
+            "capacity": 50,
+            "initTroopsCount": 20,
+            "player": "computer"
+        },
+        {
+            "location": [20, 40],
+            "capacity": 50,
+            "initTroopsCount": 20,
+            "player": "computer"
+        },
+        {
+            "location": [20, 60],
+            "capacity": 50,
+            "initTroopsCount": 20,
+            "player": "computer"
+        },
+        {
+            "location": [20, 80],
+            "capacity": 50,
+            "initTroopsCount": 20,
+            "player": "computer"
+        },
+        {
+            "location": [80, 20],
+            "capacity": 50,
+            "initTroopsCount": 20,
+            "player": "user"
+        },
+        {
+            "location": [80, 40],
+            "capacity": 50,
+            "initTroopsCount": 20,
+            "player": "user"
+        },
+        {
+            "location": [80, 60],
+            "capacity": 50,
+            "initTroopsCount": 20,
+            "player": "user"
+        },
+        {
+            "location": [80, 80],
+            "capacity": 50,
+            "initTroopsCount": 20,
+            "player": "user"
+        },
+		        {
+            "location": [50, 20],
+            "capacity": 50,
+            "initTroopsCount": 20,
+            "player": "none"
+        },
+        {
+            "location": [50, 40],
+            "capacity": 50,
+            "initTroopsCount": 20,
+            "player": "none"
+        },
+        {
+            "location": [50, 60],
+            "capacity": 50,
+            "initTroopsCount": 20,
+            "player": "none"
+        },
+        {
+            "location": [50, 80],
+            "capacity": 50,
+            "initTroopsCount": 20,
+            "player": "none"
+        },
+    ]
+}

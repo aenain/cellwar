@@ -7,7 +7,7 @@
     ],
     "towers": [
         {
-            "location": [25, 25],
+            "location": [20, 20],
             "capacity": 50,
             "initTroopsCount": 20,
             "player": "user"
@@ -16,12 +16,36 @@
             "location": [50, 50],
             "capacity": 30,
             "initTroopsCount": 5,
+            "player": "user"
+        },
+		{
+            "location": [10, 60],
+            "capacity": 30,
+            "initTroopsCount": 5,
+            "player": "computer"
+        },
+		{
+            "location": [20, 35],
+            "capacity": 100,
+            "initTroopsCount": 10,
             "player": "computer"
         },
         {
             "location": [75, 75],
             "capacity": 20,
             "initTroopsCount": 15,
+            "player": "none"
+        },
+		{
+            "location": [85, 75],
+            "capacity": 20,
+            "initTroopsCount": 15,
+            "player": "none"
+        },
+		{
+            "location": [75, 85],
+            "capacity": 30,
+            "initTroopsCount": 5,
             "player": "none"
         }
     ]

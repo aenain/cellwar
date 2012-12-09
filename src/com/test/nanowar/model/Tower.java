@@ -36,6 +36,8 @@ public class Tower {
     // in percentage of width and height of the screen
     protected Point relativeCenter;
     protected Player owner;
+    
+    protected double distance;
 
     public Tower(MainGamePanel panel) {
         this.panel = panel;
@@ -82,7 +84,7 @@ public class Tower {
     public void update() {
         synchronized(troopsCount) {
             if(troopsCount < capacity) {
-                double deltaCountPerFrame = (double)capacity / 2000;
+                double deltaCountPerFrame = Math.pow((double)capacity, 1.25)/2000;
                 troopsCount += deltaCountPerFrame;
             }
         }
@@ -109,8 +111,7 @@ public class Tower {
             bubble = new Troops(owner, count, this.relativeCenter);
             bubble.sendBetween(this, destination);
         }
-        
-        Log.d("liczymy", count + "  ");
+      
         return bubble;
     }
 
@@ -133,7 +134,8 @@ public class Tower {
 
         panel.getPlayerTroops(bubble.getOwner()).remove(bubble);
         
-        bubble.getView().remove();
+        if(bubble != null && bubble.getView() != null)
+            bubble.getView().remove();
     }
 
     public Selection select(final Selection selection) {
@@ -167,5 +169,20 @@ public class Tower {
 
     public Player getOwner() {
         return owner;
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+    
+    public double calculateDistance(Tower dest) {
+        if(dest == null) return 0;
+        com.test.nanowar.view.Tower tower1 = this.view;
+        com.test.nanowar.view.Tower tower2 = dest.view;
+        
+        distance = Math.sqrt((tower1.getCenter().x - tower2.getCenter().x) * (tower1.getCenter().x - tower2.getCenter().x) + 
+                (tower1.getCenter().y - tower2.getCenter().y) * (tower1.getCenter().y - tower2.getCenter().y)); 
+        
+        return distance;
     }
 }

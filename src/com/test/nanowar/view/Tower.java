@@ -66,7 +66,7 @@ public class Tower extends RelativeLayout {
         return position;
     }
     
-    protected Point getCenter() {
+    public Point getCenter() {
         return this.center;
     }
     

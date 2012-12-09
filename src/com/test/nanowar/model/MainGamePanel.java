@@ -200,7 +200,6 @@ public class MainGamePanel {
                 playerTroops.get(source.getOwner()).add(bubble);
             }
             source.select(Tower.Selection.NONE);
-            Log.d("wysylam troopsy", "poszly");
         }
     }
 
@@ -224,7 +223,7 @@ public class MainGamePanel {
     }
 
     public void startGame() {
-        AI comp = new AI(computerPlayer, userPlayer, nonePlayer, 50);
+        AI comp = new AI(computerPlayer, userPlayer, nonePlayer, 70);
         thread = new MainThread(this, comp);
         thread.setRunning(true);
         thread.start();

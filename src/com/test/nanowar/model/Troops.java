@@ -34,8 +34,6 @@ public class Troops extends GameObject {
         this.source = source;
         this.destination = destination;
         
-        Log.d("liczmy", "blabla");
-        Log.d("count", count.toString());
         //step = new RealPoint(destination.center.x - realCenter.x, destination.center.y - realCenter.y);
         //step.normalise();
         // TODO! obliczenie odleglosci, wyznaczenie sciezki, narysowanie linii, uruchomienie animacji
