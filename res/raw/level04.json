@@ -1,5 +1,5 @@
 {
-    "name": "Level 3",
+    "name": "Level 4",
     "timeRequirements": [
         90,
         60,
@@ -53,6 +53,30 @@
             "capacity": 50,
             "initTroopsCount": 20,
             "player": "user"
+        },
+		 {
+            "location": [50, 20],
+            "capacity": 50,
+            "initTroopsCount": 20,
+            "player": "none"
+        },
+        {
+            "location": [50, 40],
+            "capacity": 50,
+            "initTroopsCount": 20,
+            "player": "none"
+        },
+        {
+            "location": [50, 60],
+            "capacity": 50,
+            "initTroopsCount": 20,
+            "player": "none"
+        },
+        {
+            "location": [50, 80],
+            "capacity": 50,
+            "initTroopsCount": 20,
+            "player": "none"
         }
-    ]
+	]
 }

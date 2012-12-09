@@ -1,5 +1,5 @@
 {
-    "name": "Level 3",
+    "name": "Level 5",
     "timeRequirements": [
         90,
         60,
@@ -7,27 +7,15 @@
     ],
     "towers": [
         {
-            "location": [20, 20],
-            "capacity": 50,
-            "initTroopsCount": 20,
-            "player": "computer"
-        },
-        {
             "location": [20, 40],
-            "capacity": 50,
-            "initTroopsCount": 20,
+            "capacity": 60,
+            "initTroopsCount": 30,
             "player": "computer"
         },
         {
             "location": [20, 60],
             "capacity": 50,
-            "initTroopsCount": 20,
-            "player": "computer"
-        },
-        {
-            "location": [20, 80],
-            "capacity": 50,
-            "initTroopsCount": 20,
+            "initTroopsCount": 30,
             "player": "computer"
         },
         {
@@ -53,6 +41,30 @@
             "capacity": 50,
             "initTroopsCount": 20,
             "player": "user"
+        },
+		 {
+            "location": [50, 20],
+            "capacity": 50,
+            "initTroopsCount": 20,
+            "player": "computer"
+        },
+        {
+            "location": [50, 40],
+            "capacity": 60,
+            "initTroopsCount": 30,
+            "player": "player"
+        },
+        {
+            "location": [50, 60],
+            "capacity": 50,
+            "initTroopsCount": 20,
+            "player": "player"
+        },
+        {
+            "location": [50, 80],
+            "capacity": 70,
+            "initTroopsCount": 15,
+            "player": "computer"
         }
-    ]
+	]
 }

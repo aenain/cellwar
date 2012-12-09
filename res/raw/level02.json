@@ -1,5 +1,5 @@
 {
-    "name": "You can do it!",
+    "name": "Level 2",
     "timeRequirements": [
         90,
         60,
@@ -12,10 +12,22 @@
             "initTroopsCount": 20,
             "player": "user"
         },
+		 {
+            "location": [40, 40],
+            "capacity": 30,
+            "initTroopsCount": 20,
+            "player": "user"
+        },
         {
             "location": [50, 50],
             "capacity": 30,
             "initTroopsCount": 5,
+            "player": "computer"
+        },
+		{
+            "location": [20, 20],
+            "capacity": 30,
+            "initTroopsCount": 15,
             "player": "computer"
         },
         {
