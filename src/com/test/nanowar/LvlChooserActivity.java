@@ -24,6 +24,7 @@ public class LvlChooserActivity extends ListActivity {
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
+        Log.d("CHOOSER", "create");
         setContentView(R.layout.levels);
 
         ListView listView = (ListView) findViewById(android.R.id.list);
@@ -33,9 +34,11 @@ public class LvlChooserActivity extends ListActivity {
         for (int i = 0; i < levels.length; i++) {
             level = new Level(i + 1);
             level.readData(this);
+            level.readUserData(this);
             levels[i] = level;
+            Log.d("CHOOSER", "list" + Integer.toString(i));
         }
-        
+
         listView.setAdapter(new LevelListAdapter(this, levels));   
     }
 

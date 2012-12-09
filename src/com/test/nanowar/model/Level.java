@@ -8,6 +8,7 @@ import android.content.Context;
 import android.graphics.Point;
 import android.util.Log;
 import com.test.nanowar.utils.JSONReader;
+import com.test.nanowar.utils.JSONWriter;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,7 +25,7 @@ public class Level {
 
     protected String levelName;
     protected int number;
-    protected int bestScore, bestTime;
+    protected int bestScore = 0, bestTime = Integer.MAX_VALUE, currentScore, currentTime;
     protected int timeRequirements[] = new int[3];
     protected MainGamePanel panel;
     protected JSONObject data;
@@ -37,13 +38,41 @@ public class Level {
         this.panel = panel;
     }
 
+    public void saveUserData(Context context) {
+        JSONWriter writer = new JSONWriter(context);
+        JSONObject userData = new JSONObject();
+
+        try {
+            userData.put("time", bestTime);
+            userData.put("score", bestScore);
+            userData.put("name", levelName);
+            writer.writeUserLevelData(number, data);
+        } catch (JSONException ex) {
+            Log.e("Level", "writing user data error", ex);
+        }
+    }
+
+    public void readUserData(Context context) {
+        JSONReader reader = new JSONReader(context);
+        JSONObject userData = reader.getUserLevelData(number);
+        if (userData != null) {
+            try {
+                bestTime = userData.getInt("time");
+                bestScore = userData.getInt("score");
+                levelName = data.getString("name");
+            } catch (JSONException ex) {
+                Log.e("Level", "reading user data error", ex);
+            }
+        }
+    }
+
     public void readData(Context context) {
         JSONReader reader = new JSONReader(context);
         data = reader.getLevelData(number);
         if (data != null) {
             try {
                 // level name
-                setLevelName(data.getString("name"));
+                levelName = data.getString("name");
 
                 // time requirements
                 JSONArray rawRequirements = data.getJSONArray("timeRequirements");
@@ -59,6 +88,7 @@ public class Level {
     // wczytuje dane z jsona i inicjalizuje wszystkie pola (poza bestScore i bestTime)
     public void readDataAndInitTowers(Context context) {
         readData(context);
+        readUserData(context);
         if (panel == null || data == null) { return; }
         try {
             // towers
@@ -100,12 +130,20 @@ public class Level {
         }
     }
 
+    public int getScore() {
+        return currentScore;
+    }
+
     public int getBestScore() {
         return bestScore;
     }
 
     public void setBestScore(int bestScore) {
         this.bestScore = bestScore;
+    }
+
+    public int getLevelNumber() {
+        return number;
     }
 
     public String getLevelName() {
@@ -128,7 +166,26 @@ public class Level {
         return bestTime;
     }
 
+    public void setTimeAndScore(int currentTime) {
+        this.currentTime = currentTime;
+        for (int i = 2; i >= 0; i--) {
+            if (currentTime < timeRequirements[i]) {
+                this.currentScore = i + 1;
+                return;
+            }
+        }
+        this.currentScore = 0;
+    }
+
     public void setBestTime(int bestTime) {
         this.bestTime = bestTime;
+    }
+
+    public void saveResults(Context context) {
+        if (currentScore > bestScore || (currentScore == bestScore && currentTime < bestTime)) {
+            bestScore = currentScore;
+            bestTime = currentTime;
+            saveUserData(context);
+        }
     }
 }

@@ -5,6 +5,8 @@
 package com.test.nanowar;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -16,14 +18,19 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import com.larvalabs.svgandroid.SVG;
+import com.larvalabs.svgandroid.SVGParser;
+import com.test.nanowar.model.Level;
 import com.test.nanowar.model.MainGamePanel;
 import com.test.nanowar.model.Player;
+import com.test.nanowar.utils.ResourceResolver;
 
 /**
  *
  * @author artur
  */
 public class GameActivity extends Activity {
+
     protected MainLayout layout;
     protected MainGamePanel gamePanel;
 
@@ -50,7 +57,7 @@ public class GameActivity extends Activity {
         // models
         Bundle bundle = getIntent().getExtras();
         int levelNumber = bundle.getInt("level", 1);
-    
+
         final MainGamePanel gamePanel = new MainGamePanel(layout, levelNumber);
         this.gamePanel = gamePanel;
         gamePanel.initPlayers();
@@ -96,6 +103,57 @@ public class GameActivity extends Activity {
         // start game
         gamePanel.initLevel();
         gamePanel.startGame();
+    }
+
+    // gra sie zakonczyla, bo ktorys gracz wygral
+    public void onGameFinished() {
+        final Dialog dialog = new Dialog(this);
+        if (gamePanel.getUserPlayer().equals(gamePanel.getWinner())) {
+            dialog.setContentView(R.layout.victory);
+            dialog.setTitle("Victory!");
+            ImageView score = (ImageView) dialog.findViewById(R.id.score_image_victory);
+            Integer resourceId = ResourceResolver.raw("stars" + Integer.toString(gamePanel.getLevel().getScore()));
+            SVG stars = SVGParser.getSVGFromResource(getResources(), resourceId);
+            score.setImageDrawable(stars.createPictureDrawable());
+        } else {
+            dialog.setContentView(R.layout.defeat);
+            dialog.setTitle("Defeat...");
+            ImageView score = (ImageView) dialog.findViewById(R.id.score_image_defeat);
+            Integer resourceId = ResourceResolver.raw("stars" + Integer.toString(gamePanel.getLevel().getScore()));
+            SVG stars = SVGParser.getSVGFromResource(getResources(), resourceId);
+            score.setImageDrawable(stars.createPictureDrawable());
+        }
+
+        dialog.show();
+    }
+
+    public void retryCurrentLevel(View view) {
+        int currentLevelNumber = gamePanel.getLevel().getLevelNumber();
+        Intent intent = new Intent(GameActivity.this, GameActivity.class);
+        intent.putExtra("level", currentLevelNumber);
+        startActivity(intent);
+        finish();
+    }
+
+    public void openNextLevel(View view) {
+        Intent intent;
+        int currentLevelNumber = gamePanel.getLevel().getLevelNumber();
+
+        if (currentLevelNumber < Level.COUNT) {
+            intent = new Intent(GameActivity.this, GameActivity.class);
+            intent.putExtra("level", currentLevelNumber + 1);
+        } else {
+            intent = new Intent(GameActivity.this, LvlChooserActivity.class);
+        }
+
+        startActivity(intent);
+        finish();
+    }
+
+    public void openMainMenu(View view) {
+        Intent intent = new Intent(GameActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override

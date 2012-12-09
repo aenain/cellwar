@@ -13,4 +13,7 @@
     <string name="credits_authors">Artur Hebda &amp; Kamil Wajda - students of the AGH University of Science and Technology in Cracow, Poland</string>
     <string name="levels_header">Choose Level</string>
     <string name="level_name">No name</string>
+    <string name="next_level_button">Continue</string>
+    <string name="retry_level_button">Try Again</string>
+    <string name="main_menu_button">Main Menu</string>
 </resources>

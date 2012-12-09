@@ -11,4 +11,6 @@
     <color name="levels_row_name">#000000</color>
     <color name="levels_divider">#10abe2</color>
     <color name="transparent">#00000000</color>
+    <color name="dialog_background">#ffffff</color>
+    <color name="dialog_text">#10abe2</color>
 </resources>

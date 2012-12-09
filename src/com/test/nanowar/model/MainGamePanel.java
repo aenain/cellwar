@@ -6,16 +6,13 @@ package com.test.nanowar.model;
 
 import com.test.nanowar.R;
 import android.content.Context;
-import android.media.AudioManager;
-import android.util.Log;
+import com.test.nanowar.GameActivity;
 import com.test.nanowar.MainLayout;
 import java.util.*;
 import java.util.Map.Entry;
 
-import android.app.Activity;
 import android.media.AudioManager;
 import android.media.SoundPool;
-import android.media.SoundPool.OnLoadCompleteListener;
 import android.os.Vibrator;
 
 /**
@@ -33,7 +30,7 @@ public class MainGamePanel {
     protected MainLayout layout;
     protected Level level;
     protected MainThread thread;
-    protected Player userPlayer, computerPlayer, nonePlayer;
+    protected Player userPlayer, computerPlayer, nonePlayer, winner;
     
     protected Vibrator vibrator;
     protected SoundPool soundPool;
@@ -60,6 +57,7 @@ public class MainGamePanel {
         playerTroops.put(nonePlayer, new LinkedList()); // NOTE: to chyba zbedne, right?
         playerTroops.put(computerPlayer, new LinkedList());
 
+        this.winner = null;
         this.level = new Level(levelNumber);
         
         vibrator = (Vibrator)layout.getContext().getSystemService(Context.VIBRATOR_SERVICE);
@@ -246,7 +244,16 @@ public class MainGamePanel {
 
     public void stopGame() {
         thread.setRunning(false);
-        // TODO! zapis stanu gry
+        if (winner != null) {
+            GameActivity activity = (GameActivity)layout.getContext();
+            level.setTimeAndScore(thread.getTime());
+            
+            if (userPlayer.equals(winner)) {
+                level.saveResults(activity);
+            }
+
+            activity.onGameFinished();
+        }
     }
 
     public void changeOwner(Tower tower, Player oldOwner, Player newOwner) {
@@ -262,14 +269,19 @@ public class MainGamePanel {
         oldOwnerTowers.remove(tower);
 
         List<Tower> oldOwnerSelectedTowers = selectedPlayerTowers.get(oldOwner);
+        for (Tower selectedTower : oldOwnerSelectedTowers) {
+            selectedTower.select(Tower.Selection.NONE);
+        }
         oldOwnerSelectedTowers.remove(tower);
 
         List<Tower> newOwnerTowers = playerTowers.get(newOwner);
         newOwnerTowers.add(tower);
 
-        if ((oldOwner.isComputer() || oldOwner.isUser()) && oldOwnerTowers.isEmpty()) {
-            stopGame();
-            // TODO! koniec gry
+        if (oldOwnerTowers.isEmpty()) {
+            if (oldOwner.isComputer() || oldOwner.isUser()) {
+                winner = newOwner;
+                stopGame();
+            }
         }
     }
     
@@ -284,5 +296,14 @@ public class MainGamePanel {
         float volume = streamVolumeCurrent / streamVolumeMax; 
  
         soundPool.play(sound, volume, volume, 1, 0, 1f);
+    }
+
+    public Integer getScore() {
+        if (winner == null) { return null; }
+        return level.getScore();
+    }
+
+    public Player getWinner() {
+        return winner;
     }
 }

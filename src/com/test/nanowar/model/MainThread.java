@@ -14,6 +14,7 @@ import java.util.List;
 public class MainThread extends Thread {
 
     private boolean running;
+    private Long startTime, stopTime;
     final protected MainGamePanel gamePanel;
     protected AI computer;
 
@@ -30,6 +31,27 @@ public class MainThread extends Thread {
 
     public void setRunning(boolean running) {
         this.running = running;
+        if (running) {
+            startTime = System.currentTimeMillis();
+        }
+        else {
+            stopTime = System.currentTimeMillis();
+        }
+    }
+
+    // zwraca czas rozgrywki w sekundach
+    public Integer getTime() {
+        Integer time;
+        long duration;
+
+        if (stopTime != null) {
+            duration = stopTime - startTime;
+        } else {
+            duration = System.currentTimeMillis() - startTime;
+        }
+
+        time = (int)(duration / 1000.0);
+        return time;
     }
 
     @Override
