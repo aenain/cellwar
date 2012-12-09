@@ -4,6 +4,7 @@
  */
 package com.test.nanowar.model;
 
+import com.test.nanowar.R;
 import android.content.Context;
 import android.media.AudioManager;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.app.Activity;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.media.SoundPool.OnLoadCompleteListener;
+import android.os.Vibrator;
 
 /**
  *
@@ -32,6 +34,9 @@ public class MainGamePanel {
     protected Level level;
     protected MainThread thread;
     protected Player userPlayer, computerPlayer, nonePlayer;
+    
+    protected Vibrator vibrator;
+    protected SoundPool soundPool;
 
     public MainGamePanel(MainLayout layout, int levelNumber) {
         this.layout = layout;
@@ -56,6 +61,9 @@ public class MainGamePanel {
         playerTroops.put(computerPlayer, new LinkedList());
 
         this.level = new Level(levelNumber);
+        
+        vibrator = (Vibrator)layout.getContext().getSystemService(Context.VIBRATOR_SERVICE);
+        soundPool = new SoundPool(100, AudioManager.STREAM_MUSIC, 0);
     }
 
     public MainGamePanel(Player user, Player comp, Level lvl) {
@@ -242,6 +250,14 @@ public class MainGamePanel {
     }
 
     public void changeOwner(Tower tower, Player oldOwner, Player newOwner) {
+        vibrate(300);
+        if(newOwner.isComputer()) {
+            playSound(R.raw.alarm);
+        }
+        else if(newOwner.isUser()) {
+            
+        }
+        
         List<Tower> oldOwnerTowers = playerTowers.get(oldOwner);
         oldOwnerTowers.remove(tower);
 
@@ -256,5 +272,17 @@ public class MainGamePanel {
             // TODO! koniec gry
         }
     }
+    
+    public void vibrate(int time) {
+        vibrator.vibrate(time);
+    }
    
+    public void playSound(int sound) {
+        AudioManager mgr = (AudioManager)layout.getContext().getSystemService(Context.AUDIO_SERVICE);
+        float streamVolumeCurrent = mgr.getStreamVolume(AudioManager.STREAM_MUSIC);
+        float streamVolumeMax = mgr.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        float volume = streamVolumeCurrent / streamVolumeMax; 
+ 
+        soundPool.play(sound, volume, volume, 1, 0, 1f);
+    }
 }
