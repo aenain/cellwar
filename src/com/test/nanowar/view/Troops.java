@@ -216,7 +216,8 @@ public class Troops extends RelativeLayout {
     }
     
     public boolean destinationReached() {
-        return position.intersect(model.getDestination().getView().getPosition());
+        return model.getDestination().getView().getPosition().contains(center.x, center.y);
+        //return position.intersect(model.getDestination().getView().getPosition());
     }
 
     private Rect computePosition() {

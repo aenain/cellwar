@@ -193,9 +193,10 @@ public class MainGamePanel {
     public void sendTroops(Integer percentageShare, List<Tower> sources, Tower destination) {
         for (Tower source : sources) {
             Troops bubble = source.sendTroops(percentageShare, destination);
-            com.test.nanowar.view.Troops troopsView = com.test.nanowar.view.Troops.createForPlayer(bubble, layout);
-            bubble.setView(troopsView);
+            
             if (bubble != null) {
+                com.test.nanowar.view.Troops troopsView = com.test.nanowar.view.Troops.createForPlayer(bubble, layout);
+                bubble.setView(troopsView);
                 playerTroops.get(source.getOwner()).add(bubble);
             }
             source.select(Tower.Selection.NONE);
@@ -223,7 +224,8 @@ public class MainGamePanel {
     }
 
     public void startGame() {
-        thread = new MainThread(this);
+        AI comp = new AI(computerPlayer, userPlayer, nonePlayer, 50);
+        thread = new MainThread(this, comp);
         thread.setRunning(true);
         thread.start();
     }
@@ -244,6 +246,7 @@ public class MainGamePanel {
         newOwnerTowers.add(tower);
 
         if ((oldOwner.isComputer() || oldOwner.isUser()) && oldOwnerTowers.isEmpty()) {
+            stopGame();
             // TODO! koniec gry
         }
     }

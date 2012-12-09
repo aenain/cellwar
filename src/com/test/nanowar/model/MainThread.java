@@ -15,10 +15,17 @@ public class MainThread extends Thread {
 
     private boolean running;
     final protected MainGamePanel gamePanel;
+    protected AI computer;
 
     public MainThread(MainGamePanel gamePanel) {
         super();
         this.gamePanel = gamePanel;
+    }
+    
+    public MainThread(MainGamePanel gamePanel, AI comp) {
+        super();
+        this.gamePanel = gamePanel;
+        this.computer = comp;
     }
 
     public void setRunning(boolean running) {
@@ -29,14 +36,15 @@ public class MainThread extends Thread {
     public void run() {
         int ile = 0;
         while (running) {
+            computer.doMove();
             gamePanel.update();
-            if(ile == 50) {
+            /*if(ile == 50) {
                 List<Tower> towers = gamePanel.getPlayerTowers(gamePanel.getUserPlayer());
                 
                 gamePanel.sendTroops(80, towers, gamePanel.getPlayerTowers(gamePanel.getComputerPlayer()).iterator().next());
                 
             }
-            ile++;
+            ile++;*/
              try {
                sleep(20);
            } catch (InterruptedException ex) {}

@@ -110,7 +110,7 @@ public class Tower {
             bubble.sendBetween(this, destination);
         }
         
-        Log.d("liczymy", bubble.count.toString());
+        Log.d("liczymy", count + "  ");
         return bubble;
     }
 
